@@ -1,2 +1,2 @@
-# zsh-files
+# ZSH files
 Custom ZSH configuration

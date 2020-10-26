@@ -1,0 +1,10 @@
+alias __="nvim"
+alias vim="nvim"
+alias github="~/Development/github"
+alias gist="~/Development/gist"
+alias aqom="~/Development/aqom"
+alias brewup="brew update && brew upgrade && brew cleanup"
+alias gitstamp="cat ~/.localgit.cfg >> .git/config"
+
+alias ll="exa -l"
+alias lll="exa -l -L=2 -T"
