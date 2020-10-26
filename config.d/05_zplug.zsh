@@ -9,6 +9,9 @@ zplug "mafredri/zsh-async", from:"github", use:"async.zsh"
 # Oh My ZSH plugings
 zplug "plugins/gpg-agent", from:oh-my-zsh
 zplug "plugins/pass", from:oh-my-zsh
+zplug "plugins/docker", from:oh-my-zsh
+zplug "plugins/docker-compose", from:oh-my-zsh
+
 
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions"
