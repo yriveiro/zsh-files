@@ -20,10 +20,6 @@ eval "$(starship init zsh)"
 
 # Custom options
 
-# source every .zsh in dotfiles rep
-DOT_FILES=$HOME/Development/github/dotfiles
-for config_file ($DOT_FILES/**/*.zsh) source $config_file
-
 complete -o nospace -C /usr/local/bin/consul consul
 
 # Google Cloud SDK
