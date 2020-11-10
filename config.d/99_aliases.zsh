@@ -6,5 +6,7 @@ alias aqom="~/Development/aqom"
 alias brewup="brew update && brew upgrade && brew cleanup"
 alias gitstamp="cat ~/.localgit.cfg >> .git/config"
 
+alias l="exa -1"
 alias ll="exa -l"
 alias lll="exa -l -L=2 -T"
+alias kc="kubectl"

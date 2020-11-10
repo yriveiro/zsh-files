@@ -9,10 +9,12 @@ zplug "mafredri/zsh-async", from:"github", use:"async.zsh"
 # Oh My ZSH plugings
 zplug "plugins/gpg-agent", from:oh-my-zsh
 zplug "plugins/pass", from:oh-my-zsh
-zplug "plugins/docker", from:oh-my-zsh
-zplug "plugins/docker-compose", from:oh-my-zsh
+zplug "plugins/kubctl", from:oh-my-zsh
+zplug "plugins/minikube", from:oh-my-zsh
+zplug "plugins/colorize", from:oh-my-zsh
+zplug "greymd/docker-zsh-completion", from:github
 
-
+# ZSH Users plugings
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2  # zsh-syntax-highlighting must be loaded after executing compinit command
