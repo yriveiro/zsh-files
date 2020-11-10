@@ -15,10 +15,10 @@ zplug "plugins/colorize", from:oh-my-zsh
 zplug "greymd/docker-zsh-completion", from:github
 
 # ZSH Users plugings
-zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-autosuggestions"
-zplug "zsh-users/zsh-syntax-highlighting", defer:2  # zsh-syntax-highlighting must be loaded after executing compinit command
-zplug "zsh-users/zsh-history-substring-search", defer:3
+zplug "zsh-users/zsh-completions", from:github
+zplug "zsh-users/zsh-autosuggestions", from:github
+zplug "zsh-users/zsh-syntax-highlighting", from:github, defer:2  # zsh-syntax-highlighting must be loaded after executing compinit command
+zplug "zsh-users/zsh-history-substring-search", from:github, defer:3
 
 # Then, source plugins and add commands to $PATH
 zplug load

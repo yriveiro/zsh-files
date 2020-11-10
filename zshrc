@@ -1,9 +1,5 @@
 setopt extended_glob
 
-autoload -Uz promptinit bashcompinit
-promptinit
-bashcompinit
-
 # Extra zsh variables - history, auto-completion etc...
 HISTFILE=~/.zsh_history         # where to store zsh config
 HISTSIZE=10240000               # big history
@@ -20,8 +16,12 @@ eval "$(starship init zsh)"
 
 # Custom options
 
-complete -o nospace -C /usr/local/bin/consul consul
+autoload -Uz compinit
+compinit
+
 
 # Google Cloud SDK
 source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
 source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+
+# End of lines added by compinstall
