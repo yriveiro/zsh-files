@@ -1,6 +1,7 @@
 #!/bin/zsh -f
 
-source /usr/local/opt/zplug/init.zsh
+test -f /usr/local/opt/zplug/init.zsh && source /usr/local/opt/zplug/init.zsh
+test -f /usr/share/zplug/init.zsh && source /usr/share/zplug/init.zsh
 
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
