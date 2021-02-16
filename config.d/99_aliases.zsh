@@ -3,8 +3,20 @@ alias vim="nvim"
 alias gitstamp="cat ~/.localgit.cfg >> .git/config"
 
 alias l="exa -l"
+alias la="exa -la"
 alias ll="exa -l -L=2 -T"
 alias lll="exa -l -L=3 -T"
+alias ..="cd .."
+
+if command kubectl 2>&1 > /dev/null; then
+  alias k="kubectl"
+  alias ka="kubectl apply"
+  alias kc="kubectl create"
+  alias kd="kubectl describe"
+  alias kg="kubectl get"
+  alias kl="kubectl logs"
+  alias kr="kubectl delete"
+fi
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   alias github="~/Development/github"
@@ -18,14 +30,4 @@ if [[ "$OSTYPE" == "linux"* ]]; then
   alias github="cd /data/Development/github.com"
   alias gist="cd /data/Development/gist"
   alias devel="cd /data/Development"
-
-  if command kubectl 2>&1 > /dev/null; then
-      alias kc="kubectl"
-      alias kca="kubectl apply"
-      alias kcc="kubectl create"
-      alias kcd="kubectl describe"
-      alias kcg="kubectl get"
-      alias kcl="kubectl logs"
-      alias kcr="kubectl delete"
-  fi
 fi
