@@ -15,11 +15,17 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 
 if [[ "$OSTYPE" == "linux"* ]]; then
-  alias github="cd /data/Development/github"
+  alias github="cd /data/Development/github.com"
   alias gist="cd /data/Development/gist"
   alias devel="cd /data/Development"
 
-  # microk8s aliases
-  alias mc='microk8s kubectl'
-  alias mcg='microk8s kubectl get'
+  if command kubectl 2>&1 > /dev/null; then
+      alias kc="kubectl"
+      alias kca="kubectl apply"
+      alias kcc="kubectl create"
+      alias kcd="kubectl describe"
+      alias kcg="kubectl get"
+      alias kcl="kubectl logs"
+      alias kcr="kubectl delete"
+  fi
 fi
