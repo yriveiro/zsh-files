@@ -18,7 +18,7 @@ if command kubectl 2>&1 > /dev/null; then
   alias kr="kubectl delete"
 fi
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
+if test is-darwin; then
   alias github="~/Development/github"
   alias gist="~/Development/gist"
   alias brewup="brew update && brew upgrade && brew cleanup"
@@ -26,8 +26,9 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   alias kc="kubectl"
 fi
 
-if [[ "$OSTYPE" == "linux"* ]]; then
+if test is-linux; then
   alias github="cd /data/Development/github.com"
   alias gist="cd /data/Development/gist"
   alias devel="cd /data/Development"
+  alias aptup="sudo apt update; sudo apt upgrade"
 fi
