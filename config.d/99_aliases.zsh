@@ -1,3 +1,5 @@
+#!/bin/zsh -f
+
 alias __="nvim"
 alias vim="nvim"
 alias gitstamp="cat ~/.localgit.cfg >> .git/config"
@@ -18,7 +20,7 @@ if command kubectl 2>&1 > /dev/null; then
   alias kr="kubectl delete"
 fi
 
-if test is-darwin; then
+if [[ "$OSTYPE" == darwin* ]]; then
   alias github="~/Development/github"
   alias gist="~/Development/gist"
   alias brewup="brew update && brew upgrade && brew cleanup"
@@ -26,7 +28,7 @@ if test is-darwin; then
   alias kc="kubectl"
 fi
 
-if test is-linux; then
+if [[ "$OSTYPE" == linux* ]]; then
   alias github="cd /data/Development/github.com"
   alias gist="cd /data/Development/gist"
   alias devel="cd /data/Development"
