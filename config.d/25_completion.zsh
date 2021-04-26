@@ -1,5 +1,6 @@
 #!/bin/zsh -f
 
+autoload -Uz compinit
 compinit -d "$ZSH_CACHE/zcompdump"
 
 zstyle ':completion:*:*:*:*:*' menu select
