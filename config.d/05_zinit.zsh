@@ -8,6 +8,7 @@ zinit wait lucid light-mode for \
     zinit-zsh/z-a-patch-dl \
     zinit-zsh/z-a-bin-gem-node \
     zsh-users/zsh-history-substring-search \
+    'https://raw.githubusercontent.com/Azure/azure-cli/dev/az.completion' \
     Dbz/kube-aliases \
   atinit"zicompinit; zicdreplay" \
       zdharma/fast-syntax-highlighting \
