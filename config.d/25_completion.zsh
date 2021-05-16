@@ -1,7 +1,20 @@
 #!/bin/zsh -f
 
 autoload -Uz compinit
-compinit -d "$ZSH_CACHE/zcompdump"
+
+if [[ "$OSTYPE" == darwin* ]]; then
+	if [ $(date +'%j') != $(stat -f '%Sm' -t '%j' ~/.zcompdump) ]; then
+		compinit
+	else
+		compinit -C
+	fi
+else
+	if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
+		compinit;
+	else
+		compinit -C;
+	fi;
+fi
 
 zstyle ':completion:*:*:*:*:*' menu select
 
