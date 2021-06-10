@@ -9,6 +9,7 @@ alias la="exa -la"
 alias ll="exa -l -L=2 -T"
 alias lll="exa -l -L=3 -T"
 alias ..="cd .."
+alias gap="git ap ."
 
 if command kubectl 2>&1 > /dev/null; then
   alias k="kubectl"
@@ -25,7 +26,6 @@ if [[ "$OSTYPE" == darwin* ]]; then
   alias gist="~/Development/gist"
   alias brewup="brew update && brew upgrade && brew cleanup"
   alias devel="cd ~/Development"
-  alias kc="kubectl"
 fi
 
 if [[ "$OSTYPE" == linux* ]]; then
