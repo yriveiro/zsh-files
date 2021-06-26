@@ -1,15 +1,25 @@
 #!/bin/zsh -f
 
+# System
+alias c="clear"
 alias __="nvim"
 alias vim="nvim"
-alias gitstamp="cat ~/.localgit.cfg >> .git/config"
 
-alias l="exa -l"
-alias la="exa -la"
-alias ll="exa -l -L=2 -T"
-alias lll="exa -l -L=3 -T"
+if command exa 2>&1 > /dev/null; then
+  alias l="exa -l"
+  alias la="exa -la"
+  alias ll="exa -l -L=2 -T"
+  alias lll="exa -l -L=3 -T"
+fi
+
 alias ..="cd .."
+
+# Git
+alias gitstamp="cat ~/.localgit.cfg >> .git/config"
+alias g="git"
 alias gap="git ap ."
+alias gst="git st"
+alias gci="git ci -m "
 
 if command kubectl 2>&1 > /dev/null; then
   alias k="kubectl"
