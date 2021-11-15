@@ -34,6 +34,12 @@ eval "$(starship init zsh)"
 # Google Cloud SDK
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-	source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-	source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+    local brew_path="/opt/homebrew/Caskroom"
+
+    if [[ $(sw_vers -productVersion) =~ ^10.15.* ]]; then
+      local brew_path="/usr/local/Caskroom"
+    fi
+
+    source "${brew_path}/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
+    source "${brew_path}/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
 fi
