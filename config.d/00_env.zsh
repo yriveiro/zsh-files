@@ -5,8 +5,8 @@ export EDITOR=nvim
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   export RUST_SRC_PATH="/usr/local/src/rustc/src"
-  export PATH=$PATH:/usr/local/bin/go
-  export GOPATH=~/Development/go/bin
+  export PATH=$PATH:/usr/local/bin/go:~/Development/go/bin
+  export GOPATH=~/Development/go
 fi
 
 if [[ "$OSTYPE" == "linux"* ]]; then

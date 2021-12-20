@@ -23,9 +23,6 @@ for f in ~/.config/zsh/config.d/*; do
     source $f
 done
 
-
-
-
 ### End of Zinit's installer chunk
 
 export STARSHIP_CONFIG=~/.config/starship.toml

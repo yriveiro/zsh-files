@@ -5,6 +5,8 @@ alias c="clear"
 alias __="nvim"
 alias vim="nvim"
 
+alias ..="cd .."
+
 if command exa 2>&1 > /dev/null; then
   alias l="exa -l"
   alias la="exa -la"
@@ -12,7 +14,10 @@ if command exa 2>&1 > /dev/null; then
   alias lll="exa -l -L=3 -T"
 fi
 
-alias ..="cd .."
+if command terraform -version 2>&1 > /dev/null; then
+  alias tfp="terraform plan"
+  alias tfa="terraform apply"
+fi
 
 # Git
 alias gitstamp="cat ~/.localgit.cfg >> .git/config"
