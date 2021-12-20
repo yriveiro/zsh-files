@@ -18,4 +18,5 @@ zinit wait lucid light-mode for \
   blockf atpull'zinit creinstall -q .' \
       zsh-users/zsh-completions \
   as"completion" \
-      OMZP::pass/_pass
+      OMZP::pass/_pass \
+      dwaynebradley/k3d-oh-my-zsh-plugin
