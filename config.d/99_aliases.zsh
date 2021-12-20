@@ -25,7 +25,6 @@ if command kubectl 2>&1 > /dev/null; then
   alias k="kubectl"
   alias ka="kubectl apply"
   alias kc="kubectl create"
-  alias kd="kubectl describe"
   alias kg="kubectl get"
   alias kl="kubectl logs"
   alias kr="kubectl delete"
