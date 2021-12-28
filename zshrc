@@ -25,6 +25,8 @@ done
 
 ### End of Zinit's installer chunk
 
+zle_highlight=('paste:none')
+
 export STARSHIP_CONFIG=~/.config/starship.toml
 eval "$(starship init zsh)"
 
