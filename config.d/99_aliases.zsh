@@ -15,6 +15,7 @@ if command exa 2>&1 > /dev/null; then
 fi
 
 if command terraform -version 2>&1 > /dev/null; then
+  alias tfv="terraform validate"
   alias tfp="terraform plan"
   alias tfa="terraform apply"
 fi
