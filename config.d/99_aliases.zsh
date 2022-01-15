@@ -15,13 +15,17 @@ if command exa 2>&1 > /dev/null; then
 fi
 
 if command terraform -version 2>&1 > /dev/null; then
+  alias tfv="terraform validate"
   alias tfp="terraform plan"
   alias tfa="terraform apply"
 fi
 
 # Git
+
 alias gitstamp="cat ~/.localgit.cfg >> .git/config"
 alias g="git"
+alias gpl="git pull"
+alias gps="git push"
 alias gap="git ap ."
 alias gst="git st"
 alias gci="git ci -m "
