@@ -36,7 +36,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     local brew_path="/opt/homebrew/Caskroom"
 
     if [[ $(sw_vers -productVersion) =~ ^10.15.* ]]; then
-      local brew_path="/usr/local/Caskroom"
+      brew_path="/usr/local/Caskroom"
     fi
 
     source "${brew_path}/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"

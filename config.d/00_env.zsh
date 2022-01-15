@@ -8,8 +8,8 @@ export LANG=en_US.UTF-8
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   export RUST_SRC_PATH="/usr/local/src/rustc/src"
-  export PATH=$PATH:/usr/local/bin/go:~/Development/go/bin
   export GOPATH=~/Development/go
+  export PATH=$PATH:/usr/local/bin/go:~/Development/go/bin
 fi
 
 if [[ "$OSTYPE" == "linux"* ]]; then

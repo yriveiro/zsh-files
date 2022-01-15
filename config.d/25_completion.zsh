@@ -18,7 +18,7 @@ fi
 
 zstyle ':completion:*:*:*:*:*' menu select
 
-# Enable Cace
+# Enable Cache
 zstyle ':completion::complete:*' use-cache 1
 zstyle ':completion::complete:*' cache-path $ZSH_CACHE
 
