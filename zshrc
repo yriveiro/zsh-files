@@ -42,3 +42,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     source "${brew_path}/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
     source "${brew_path}/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
 fi
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/terraform terraform
