@@ -4,6 +4,7 @@
 alias c="clear"
 alias __="nvim"
 alias vim="nvim"
+alias :q="exit"
 
 alias ..="cd .."
 
@@ -18,6 +19,7 @@ if command terraform -version 2>&1 > /dev/null; then
   alias tfv="terraform validate"
   alias tfp="terraform plan"
   alias tfa="terraform apply"
+  alias tfc="terraform console"
 fi
 
 # Git
