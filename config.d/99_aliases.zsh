@@ -41,6 +41,10 @@ if command kubectl 2>&1 > /dev/null; then
   alias kr="kubectl delete"
 fi
 
+if command tmux -V 2>&1 > /dev/null; then
+  alias mu="tmux"
+fi
+
 if [[ "$OSTYPE" == darwin* ]]; then
   alias github="~/Development/github"
   alias gist="~/Development/gist"
