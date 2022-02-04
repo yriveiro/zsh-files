@@ -15,7 +15,7 @@ zinit wait lucid light-mode for \
       zdharma-continuum/fast-syntax-highlighting \
   atload"_zsh_autosuggest_start" \
       zsh-users/zsh-autosuggestions \
-  blockf atpull'zinit creinstall -q .' \
+  atpull'zinit creinstall -q .' \
       zsh-users/zsh-completions \
   as"completion" \
       OMZP::pass/_pass \
