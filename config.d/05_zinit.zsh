@@ -19,4 +19,6 @@ zinit wait lucid light-mode for \
       zsh-users/zsh-completions \
   as"completion" \
       OMZP::pass/_pass \
-      dwaynebradley/k3d-oh-my-zsh-plugin
+      OMZP::aws/aws.plugin.zsh \
+      dwaynebradley/k3d-oh-my-zsh-plugin \
+      MenkeTechnologies/zsh-cargo-completion

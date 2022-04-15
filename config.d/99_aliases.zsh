@@ -43,6 +43,8 @@ fi
 
 if command tmux -V 2>&1 > /dev/null; then
   alias mu="tmux"
+  alias mua="tmux attach"
+  alias muls="tmux ls"
 fi
 
 if [[ "$OSTYPE" == darwin* ]]; then
