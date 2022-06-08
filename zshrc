@@ -35,7 +35,7 @@ eval "$(starship init zsh)"
 if [[ "$OSTYPE" == "darwin"* ]]; then
     local brew_path="/opt/homebrew/Caskroom"
 
-    if [[ $(sw_vers -productVersion) =~ ^11.* ]]; then
+    if [[ $(arch) =~ ^i386 ]]; then
       local brew_path="/usr/local/Caskroom"
     fi
 
