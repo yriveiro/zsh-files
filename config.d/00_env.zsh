@@ -5,13 +5,15 @@ export EDITOR=nvim
 export GPG_TTY=$(tty)
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
+export SETUPTOOLS_USE_DISTUTILS=stdlib
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   export RUST_SRC_PATH="/usr/local/src/rustc/src"
   export GOPATH=~/Development/go
-  export JAVA_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-java17-22.0.0.2/Contents/Home
+  export JAVA_HOME=/opt/homebrew/Cellar/openjdk/18.0.1/libexec/openjdk.jdk/Contents/Home
+  export JDTLS_HOME=/Users/yriveiro/.local/share/nvim/lsp_servers/jdtls
 
-  export PATH=$PATH:/usr/local/bin/go:~/Development/go/bin:/Library/Java/JavaVirtualMachines/graalvm-ce-java17-22.0.0.2/Contents/Home/bin
+  export PATH=$PATH:/usr/local/bin/go:~/Development/go/bin:/opt/homebrew/Cellar/openjdk/18.0.1/libexec/openjdk.jdk/Contents/Home/bin
 fi
 
 if [[ "$OSTYPE" == "linux"* ]]; then

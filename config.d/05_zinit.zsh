@@ -21,4 +21,5 @@ zinit wait lucid light-mode for \
       OMZP::pass/_pass \
       OMZP::aws/aws.plugin.zsh \
       dwaynebradley/k3d-oh-my-zsh-plugin \
-      MenkeTechnologies/zsh-cargo-completion
+      MenkeTechnologies/zsh-cargo-completion \
+      sudosubin/zsh-poetry
