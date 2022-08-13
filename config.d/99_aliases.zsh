@@ -30,7 +30,7 @@ alias gpl="git pull"
 alias gps="git push"
 alias gap="git ap ."
 alias gst="git st"
-alias gci="git ci -m "
+alias gci="git ci -S -m "
 
 if command kubectl 2>&1 > /dev/null; then
   alias k="kubectl"
