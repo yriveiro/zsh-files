@@ -17,6 +17,7 @@ zinit wait lucid light-mode for \
       zsh-users/zsh-autosuggestions \
   atpull'zinit creinstall -q .' \
       zsh-users/zsh-completions \
+      yriveiro/zsh-completions \
   as"completion" \
       OMZP::pass/_pass \
       OMZP::aws/aws.plugin.zsh \
