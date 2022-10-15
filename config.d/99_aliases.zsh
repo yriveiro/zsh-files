@@ -31,6 +31,8 @@ alias gps="git push"
 alias gap="git ap ."
 alias gst="git st"
 alias gci="git ci -S -m "
+alias gw="git worktree"
+alias gwl="git worktree list"
 
 if command kubectl 2>&1 > /dev/null; then
   alias k="kubectl"
