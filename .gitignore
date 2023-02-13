@@ -1,1 +1,3 @@
-./config.local.d/*
+# Ensure we track local folder but not content
+config.local.d/*
+config.local.d/.gitkeep
