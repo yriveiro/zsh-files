@@ -23,6 +23,11 @@ for f in ~/.config/zsh/config.d/*; do
     source $f
 done
 
+# load local content if exists 
+for f in ~/.config/zsh/config.local.d/*; do
+    source $f
+done
+
 ### End of Zinit's installer chunk
 
 zle_highlight=('paste:none')
