@@ -13,7 +13,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   export JAVA_HOME=/opt/homebrew/Cellar/openjdk/18.0.1/libexec/openjdk.jdk/Contents/Home
   export JDTLS_HOME=/Users/yriveiro/.local/share/nvim/lsp_servers/jdtls
 
-  export PATH=$PATH:/usr/local/bin/go:~/Development/go/bin:/opt/homebrew/Cellar/openjdk/18.0.1/libexec/openjdk.jdk/Contents/Home/bin
+  export PATH=/usr/local/bin/go:~/Development/go/bin:/opt/homebrew/opt/gnu-getopt/bin:$PATH
 fi
 
 if [[ "$OSTYPE" == "linux"* ]]; then
