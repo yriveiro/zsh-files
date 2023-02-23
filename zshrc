@@ -24,9 +24,11 @@ for f in ~/.config/zsh/config.d/*; do
 done
 
 # load local content if exists 
-for f in ~/.config/zsh/config.local.d/*; do
-    source $f
-done
+if [[ -d /path/to/folder ]]; then
+  for f in ~/.config/zsh/config.local.d/; do
+      source $f
+  done
+fi
 
 ### End of Zinit's installer chunk
 
