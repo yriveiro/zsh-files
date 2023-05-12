@@ -67,3 +67,5 @@ if [[ "$OSTYPE" == linux* ]]; then
   alias devel="cd /data/Development"
   alias aptup="sudo apt update; sudo apt upgrade"
 fi
+
+alias yubikey-scan="gpg-connect-agent \"scd serialno\" \"learn --force\" /bye"
