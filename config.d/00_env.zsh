@@ -10,10 +10,10 @@ export SETUPTOOLS_USE_DISTUTILS=stdlib
 if [[ "$OSTYPE" == "darwin"* ]]; then
   export RUST_SRC_PATH="/usr/local/src/rustc/src"
   export GOPATH=~/Development/go
-  export JAVA_HOME=/opt/homebrew/Cellar/openjdk/18.0.1/libexec/openjdk.jdk/Contents/Home
+  export JAVA_HOME=/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home/
   export JDTLS_HOME=/Users/yriveiro/.local/share/nvim/lsp_servers/jdtls
 
-  export PATH=/usr/local/bin/go:~/Development/go/bin:/opt/homebrew/opt/gnu-getopt/bin:$PATH
+  export PATH=/usr/local/bin/go:~/Development/go/bin:/opt/homebrew/opt/gnu-getopt/bin:~/.krew/bin:$PATH
 fi
 
 if [[ "$OSTYPE" == "linux"* ]]; then

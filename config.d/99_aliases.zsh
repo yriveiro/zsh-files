@@ -69,3 +69,4 @@ if [[ "$OSTYPE" == linux* ]]; then
 fi
 
 alias yubikey-scan="gpg-connect-agent \"scd serialno\" \"learn --force\" /bye"
+alias net-speed="networkQuality -v -p"
