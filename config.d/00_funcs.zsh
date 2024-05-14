@@ -11,18 +11,28 @@ function err
   printf "\e[31m[ERR]\e[0m: ${1}\n" 2>&1
 }
 
-function ec () {
-  local ctx=$1
+# Define color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+RESET='\033[0m'
 
-  if [[ -z "${ctx}" ]]; then
+# Define icons
+CHECK_MARK="\u2714"
+CROSS_MARK="\u2716"
+
+
+function ec () {
+  if [[ -z "${1}" ]]; then
     err "Context can't be empty"
     return
   fi
 
-  if [[ -e "${HOME}/.config/${ctx}" ]]; then
-    cd "${HOME}/.config/${ctx}"
-    nvim
-  else
-    err "No configuration found for context: \e[1;33m${ctx}\e[0m"
+  local ctx_dir="${HOME}/.config/${1}"
+
+  if [[ ! -d "${ctx_dir}" ]]; then
+    err "No configuration found for context: \e[1;33m${1}\e[0m"
   fi
+
+  cd "${ctx_dir}"
+  nvim
 }

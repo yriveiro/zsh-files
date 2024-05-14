@@ -20,6 +20,7 @@ if [[ "$OSTYPE" == "linux"* ]]; then
   export PATH=$PATH:/usr/local/go/bin:/data/Development/go/bin:/usr/local/kubebuilder/bin
   export GOPATH=/data/Development/go
   export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+  export DOCKER_DEFAULT_PLATFORM=linux/amd64
 
   if [[ -d /usr/local/kubebuilder/bin ]]; then
     export PATH=$PATH:/usr/local/kubebuilder/bin

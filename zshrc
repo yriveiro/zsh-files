@@ -24,8 +24,8 @@ for f in "${HOME}/.config/zsh/config.d"/*; do
 done
 
 # load local content if exists 
-if [[ -d "${HOME}/.config/zsh/config.local.d" ]]; then
-  for f in "${HOME}/.config/zsh/config.local.d"/*; do
+if [[ -d "${HOME}/.config/zsh/config.local.d/" ]]; then
+  for f in "${HOME}/.config/zsh/config.local.d/"*; do
       source "${f}"
   done
 fi
