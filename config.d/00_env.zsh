@@ -14,6 +14,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   export JDTLS_HOME=/Users/yriveiro/.local/share/nvim/lsp_servers/jdtls
 
   export PATH=/usr/local/bin/go:~/Development/go/bin:/opt/homebrew/opt/gnu-getopt/bin:~/.krew/bin:$PATH
+  export DYLD_LIBRARY_PATH="$(brew --prefix)/lib:$DYLD_LIBRARY_PATH"
   export LUA_PATH="${LUA_PATH};/Users/Yago.Riveiro/.luarocks/share/lua/5.1/?.lua;/Users/Yago.Riveiro/.luarocks/share/lua/5.1/?/init.lua"
 fi
 
