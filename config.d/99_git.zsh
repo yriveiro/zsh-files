@@ -22,11 +22,17 @@ function gcb() {
 
   if [[ -z "$repository_path" ]]; then 
     echo "${CROSS} Repository path is required."
+    echo ""
+    echo "usage: gcb repository_path service_host protocol"
+
     return 1
   fi
 
   if [[ "$protocol" != "ssh" && "$protocol" != "https" ]]; then 
     echo "${CROSS} Invalid protocol, use ssh or https."
+    echo ""
+    echo "usage: gcb repository_path service_host protocol"
+
     return 1;
   fi
 
