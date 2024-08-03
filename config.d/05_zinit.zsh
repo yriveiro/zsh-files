@@ -11,6 +11,7 @@ zinit wait lucid light-mode for \
     zsh-users/zsh-history-substring-search \
     Dbz/kube-aliases \
     agkozak/zsh-z \
+    webyneter/docker-aliases \
   atinit"autoload -Uz bashcompinit && bashcompinit" \
     'https://raw.githubusercontent.com/Azure/azure-cli/dev/az.completion' \
   atinit"zicompinit; zicdreplay" \
