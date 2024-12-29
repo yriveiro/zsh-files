@@ -1,66 +1,63 @@
-# options that should be mostly pretty agreeable
+#!/bin/zsh -f
 
-# no c-s/c-q output freezing
-setopt noflowcontrol
-# allow expansion in prompts
-setopt prompt_subst
-# this is default, but set for share_history
-setopt append_history
-# save each command's beginning timestamp and the duration to the history file
-setopt extended_history
-# display PID when suspending processes as well
-setopt longlistjobs
-# try to avoid the 'zsh: no matches found...'
-setopt nonomatch
-# report the status of backgrounds jobs immediately
-setopt notify
-# whenever a command completion is attempted, make sure the entire command path
-# is hashed first.
-setopt hash_list_all
-# not just at the end
-setopt completeinword
-# use zsh style word splitting
-setopt noshwordsplit
-# allow use of comments in interactive code
-setopt interactivecomments
-
-# in order to use #, ~ and ^ for filename generation grep word
-# *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files
-# don't forget to quote '^', '~' and '#'!
-setopt extended_glob
-
-# don't error out when unset parameters are used
-setopt unset
-
-###########
-# These are some more options that might warrant being on higher insanity levels,
-# but since I don't use them... I'll leave them out for now
-
-# watch for everyone but me and root
-#watch=(notme root)
-# automatically remove duplicates from these arrays
+# Remove duplicates in these arrays
 typeset -U path cdpath fpath manpath
 
-# import new commands from the history file also in other zsh-session
-setopt share_history
-# If a new command line being added to the history list duplicates an older
-# one, the older command is removed from the list
-setopt histignorealldups
-# remove command lines from the history list when the first character on the
-# line is a space
-setopt histignorespace
-# if a command is issued that can't be executed as a normal command, and the
-# command is the name of a directory, perform the cd command to that directory.
-setopt auto_cd
+####################
+# Input/Terminal Control
+####################
+setopt noflowcontrol     # Disable flow control (ctrl-s/ctrl-q)
+setopt nobeep           # No beeping
+setopt interactivecomments # Allow comments in interactive shells
+setopt prompt_subst     # Allow substitution in prompt
 
+####################
+# History (Atuin Optimized)
+####################
+setopt extended_history    # Save timestamp and duration
+setopt inc_append_history  # Write immediately, better for Atuin integration
+setopt hist_verify        # Don't execute immediately upon history expansion
 
-# Don't send SIGHUP to background processes when the shell exits.
-#setopt nohup
-# make cd push the old directory onto the directory stack.
-#setopt auto_pushd
-# avoid "beep"ing
-setopt nobeep
-# don't push the same dir twice.
-#setopt pushd_ignore_dups
-# * shouldn't match dotfiles. ever.
-#setopt noglobdots
+####################
+# Directory Navigation
+####################
+setopt auto_cd            # Auto change to a dir without typing cd
+setopt auto_pushd         # Make cd push the old directory onto the stack
+setopt pushd_ignore_dups  # Don't push multiple copies
+setopt pushd_minus        # Exchanges meanings of +/- when using cd -/+N
+setopt pushd_silent       # Don't print directory stack after pushd/popd
+
+####################
+# Completion
+####################
+setopt hash_list_all      # Hash entire command path first
+setopt completeinword     # Allow completion from within a word
+setopt always_to_end      # Move cursor to end of word after completion
+setopt auto_menu          # Show completion menu on successive tab press
+setopt auto_list          # Automatically list choices on ambiguous completion
+setopt auto_param_slash   # If completed parameter is a directory, add a trailing slash
+setopt no_list_beep       # Don't beep on an ambiguous completion
+
+####################
+# Globbing and Files
+####################
+setopt extended_glob      # Use extended globbing syntax
+setopt nonomatch         # Try to avoid 'no matches found...'
+setopt noglobdots        # Don't match dotfiles without explicit dot
+setopt numeric_glob_sort  # Sort filenames numerically when relevant
+setopt rm_star_wait      # 10 second wait if you do 'rm *'
+setopt noshwordsplit     # Use zsh style word splitting
+
+####################
+# Job Control
+####################
+setopt longlistjobs      # Display PID when suspending processes
+setopt notify            # Report status of background jobs immediately
+setopt auto_resume       # Attempt to resume existing job before creating new one
+
+####################
+# Error Prevention & Safety
+####################
+setopt unset             # Don't error out when unset parameters are used
+setopt no_clobber       # Don't overwrite files with > (use >! to override)
+setopt path_dirs        # Perform path search even on command names with slashes

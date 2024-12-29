@@ -1,97 +1,93 @@
 #!/bin/zsh -f
 
-autoload -Uz compinit
+# ==============================================================================
+# ZSH Common Completion Configuration
+# Purpose: Define common completion settings shared across platforms
+# Author: Yago Riveiro
+# ==============================================================================
 
-if [[ "$OSTYPE" == darwin* ]]; then
-	if [ $(date +'%j') != $(stat -f '%Sm' -t '%j' ~/.zcompdump) ]; then
-		compinit
-	else
-		compinit -C
-	fi
-else
-	if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
-		compinit;
-	else
-		compinit -C;
-	fi;
-fi
+# ------------------------------------------------------------------------------
+# Core Completion Settings
+# Basic settings for how completions behave
+# ------------------------------------------------------------------------------
+# Enable completion caching
+zstyle ':completion::complete:*' use-cache on
+zstyle ':completion::complete:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/completion"
 
+# Completion menu behavior
 zstyle ':completion:*:*:*:*:*' menu select
+zstyle ':completion:*' menu yes select interactive
+zstyle ':completion:*' show-completer true  # Show message while waiting
+zstyle ':completion:*' verbose true         # Provide verbose completion information
+zstyle ':completion:*' insert-tab false     # Don't insert tab when empty
+zstyle ':completion:*' accept-exact-dirs true  # No parent path completion for existing dirs
 
-# Enable Cache
-zstyle ':completion::complete:*' use-cache 1
-zstyle ':completion::complete:*' cache-path $ZSH_CACHE
+# ------------------------------------------------------------------------------
+# Completion Matching and Grouping
+# Configure how completions are matched and grouped
+# ------------------------------------------------------------------------------
+# Smart matching including dashed values
+zstyle ':completion:*' matcher-list 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
-# Enable approximate completions
-zstyle ':completion:*' completer _expand _complete _ignored _approximate
+# Fuzzy matching of completions
+zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3)) numeric)'
 
-# Automatically update PATH entries
-zstyle ':completion:*' rehash true
+# Grouping and formatting
+zstyle ':completion:*' group-name ''        # Group matches by category
+zstyle ':completion:*:matches' group 'yes'  # Group matches and describe
+zstyle ':completion:*' list-dirs-first true # Separate directories from files
 
-# Use menu completion
-zstyle ':completion:*' menu yes select
+# ------------------------------------------------------------------------------
+# Visual Formatting
+# Configure the appearance of completions
+# ------------------------------------------------------------------------------
+# Formatting messages and descriptions
+zstyle ':completion:*:messages' format '%F{yellow}-- %d --%f'
+zstyle ':completion:*:descriptions' format '%F{blue}-- %d --%f'
+zstyle ':completion:*:corrections' format '%F{green}-- %d (errors: %e) --%f'
+zstyle ':completion:*:warnings' format '%F{red}-- no matches found --%f'
 
-# Verbose completion results
-zstyle ':completion:*' verbose true
+# Colors in completion menu
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
-# Smart matching of dashed values, e.g. f-b matching foo-bar
-zstyle ':completion:*' matcher-list 'r:|[._-]=* r:|=*'
+# Prettier process selection
+zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
+zstyle ':completion:*:*:*:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 
-# Group results by category
-zstyle ':completion:*' group-name ''
-
-# Don't insert a literal tab when trying to complete in an empty buffer
-zstyle ':completion:*' insert-tab false
-
-# Keep directories and files separated
-zstyle ':completion:*' list-dirs-first true
-
-# Don't try parent path completion if the directories exist
-zstyle ':completion:*' accept-exact-dirs true
-
-# Always use menu selection for `cd -`
+# ------------------------------------------------------------------------------
+# Directory Navigation
+# Settings specific to directory navigation
+# ------------------------------------------------------------------------------
+# cd command completion behavior
 zstyle ':completion:*:*:cd:*:directory-stack' force-list always
 zstyle ':completion:*:*:cd:*:directory-stack' menu yes select=0 search
 
-# Pretty messages during pagination
+# Pagination prompts
 zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character to insert%s'
 zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
 
-# Nicer format for completion messages
-zstyle ':completion:*:matches' group 'yes'
-zstyle ':completion:*:messages' format $'\e[00;31m%d'
-zstyle ':completion:*:descriptions' format '%U%B%d%b%u'
-zstyle ':completion:*:corrections' format '%U%F{green}%d (errors: %e)%f%u'
-zstyle ':completion:*:warnings' format '%F{202}%BSorry, no matches for: %F{214}%d%b'
-zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)*==36=36}:${(s.:.)LS_COLORS}")';
+# ------------------------------------------------------------------------------
+# Man Page Completion
+# Configure how man page completions are displayed
+# ------------------------------------------------------------------------------
+zstyle ':completion:*:manuals' separate-sections true
+zstyle ':completion:*:manuals.(^1*)' insert-sections true
 
-# Show message while waiting for completion
-zstyle ':completion:*' show-completer true
-
-# Prettier completion for processes
-zstyle ':completion:*:*:*:*:processes' force-list always
-zstyle ':completion:*:*:*:*:processes' menu yes select
-zstyle ':completion:*:*:*:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
-zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,args -w -w"
-
-# Use ls-colors for path completions
-function _set-list-colors() {
-	zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-	unfunction _set-list-colors
-}
-sched 0 _set-list-colors  # deferred since LC_COLORS might not be available yet
-
-# Don't complete hosts from /etc/hosts
-zstyle -e ':completion:*' hosts 'reply=()'
-
-zstyle ':completion:*' single-ignored show
-
+# ------------------------------------------------------------------------------
+# Search and Filter Settings
+# Configure search behavior in completions
+# ------------------------------------------------------------------------------
 zstyle ':filter-select:highlight' matched fg=red
 zstyle ':filter-select' max-lines 1000
 zstyle ':filter-select' rotate-list yes
-zstyle ':filter-select' case-insensitive yes # enable case-insensitive search
+zstyle ':filter-select' case-insensitive yes
 
-# complete man pages
-zstyle ':completion:*:manuals' separate-sections true
-zstyle ':completion:*:manuals.(^1*)' insert-sections true
+# Exclude /etc/hosts from hostname completion
+zstyle -e ':completion:*' hosts 'reply=()'
+
+# Show message for ignored matches
+zstyle ':completion:*' single-ignored show
+
+# Automatically update PATH entries
+zstyle ':completion:*' rehash true

@@ -1,38 +1,64 @@
 #!/bin/zsh -f
 
-# Messages with log level
-function info
-{
-  printf "\e[36m[INFO]\e[0m: ${1}\n" 2>&1
-}
+# ==============================================================================
+# ZSH Common Functions Configuration
+# Purpose: Define common utility functions for messages and configuration editing
+# Author: Yago Riveiro
+# ==============================================================================
 
-function err
-{
-  printf "\e[31m[ERR]\e[0m: ${1}\n" 2>&1
-}
+# ------------------------------------------------------------------------------
+# Common Color Configuration
+# Source shared color and icon definitions for consistent styling
+# ------------------------------------------------------------------------------
+source "${0:A:h}/00_colors.zsh"
 
-# Define color codes
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-RESET='\033[0m'
-
-# Define icons
-CHECK_MARK="\u2714"
-CROSS_MARK="\u2716"
-
-
-function ec () {
+# ------------------------------------------------------------------------------
+# Configuration Navigation Functions
+# These functions help navigate and edit configuration directories
+# ------------------------------------------------------------------------------
+# Edit configuration in specified context directory under ~/.config
+# Usage: ec <context_name>
+function ec() {
   if [[ -z "${1}" ]]; then
     err "Context can't be empty"
-    return
+    return 1
   fi
 
   local ctx_dir="${HOME}/.config/${1}"
 
   if [[ ! -d "${ctx_dir}" ]]; then
-    err "No configuration found for context: \e[1;33m${1}\e[0m"
+    err "No configuration found for context: ${YELLOW}${1}${RESET}"
+    return 1
   fi
 
-  cd "${ctx_dir}"
-  nvim
+  (
+    cd "${ctx_dir}" || {
+      err "Failed to change to directory: ${YELLOW}${ctx_dir}${RESET}"
+      return 1
+    }
+
+    nvim || {
+      err "Failed to open nvim"
+      return 1
+    }
+  )
+}
+
+# ------------------------------------------------------------------------------
+# Git Repository Functions
+# These functions help manage git repository configurations
+# ------------------------------------------------------------------------------
+# Configure bare git repository to fetch all remote references
+# Must be executed within a git repository
+function patch_bare() {
+  command git rev-parse --is-inside-work-tree &>/dev/null || {
+    err "Not in a git repository"
+    return 1
+  }
+
+  info "Patch repository ${PWD}"
+  git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" || {
+    err "Failed to patch repository"
+    return 1
+  }
 }
