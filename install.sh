@@ -51,29 +51,28 @@ REPO_URL="https://github.com/yriveiro/zsh-files.git"
 # Args:
 #   $1 - Message to display
 log_info() {
-  echo -e "${BLUE}${GEAR}${RESET} $1"
+  printf "%b%b%b %s\n" "${BLUE}" "${GEAR}" "${RESET}" "$1"
 }
 
 # Display success message
 # Args:
 #   $1 - Message to display
 log_success() {
-  echo -e "${GREEN}${CHECK}${RESET} $1"
+  printf "%b%b%b %s\n" "${GREEN}" "${CHECK}" "${RESET}" "$1"
 }
 
 # Display warning message
 # Args:
 #   $1 - Message to display
 log_warning() {
-  echo -e "${YELLOW}${WARNING}${RESET} $1"
+  printf "%b%b%b %s\n" "${YELLOW}" "${WARNING}" "${RESET}" "$1"
 }
 
 # Display error message and return error code
 # Args:
 #   $1 - Error message to display
 log_error() {
-  echo -e "${RED}${ERROR}${RESET} $1"
-  return 1
+  printf "%b%b%b %s\n" "${RED}" "${ERROR}" "${RESET}" "$1"
 }
 
 #------------------------------------------------------------------------------
@@ -132,23 +131,23 @@ create_symlink() {
 # Main installation function
 # Orchestrates the entire installation process
 main() {
-  echo -e "\n${ROCKET} Installing ZSH configuration...\n"
+  printf "\n%s Installing ZSH configuration...\n\n" "${ROCKET}"
 
-  echo -e "${PACKAGE} Checking dependencies..."
+  printf "%s Checking dependencies...\n" "${PACKAGE}"
   check_dependencies
 
-  echo -e "\n${GEAR} Preparing installation..."
+  printf "\n%s Preparing installation...\n" "${GEAR}"
   backup_existing
 
-  echo -e "\n${ZSH_ICON} Cloning zsh-files repository..."
+  printf "\n%s Cloning zsh-files repository...\n" "${ZSH_ICON}"
   git clone --quiet "$REPO_URL" "$CONFIG_DIR" || log_error "Failed to clone repository"
   log_success "Repository cloned successfully"
 
-  echo -e "\n${LINK} Setting up configuration..."
+  printf "\n%s Setting up configuration...\n" "${LINK}"
   create_symlink
 
-  echo -e "\n${ROCKET} Installation completed successfully!"
-  echo -e "${ZSH_ICON} Please restart your shell or run: source ~/.zshrc\n"
+  printf "\n%s Installation completed successfully!\n" "${ROCKET}"
+  printf "%s Please restart your shell or run: source ~/.zshrc\n\n" "${ZSH_ICON}"
 }
 
 # Start the installation

@@ -28,3 +28,4 @@ alias brewup="brew update && brew upgrade && brew cleanup && brew autoremove"
 # macOS-specific network tools
 # ------------------------------------------------------------------------------
 alias net-speed="networkQuality -v -p"
+alias mk="make"

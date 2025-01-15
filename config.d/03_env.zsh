@@ -16,6 +16,8 @@ export LSCOLORS='exfxcxdxbxegedabagacad'
 export CLICOLOR=true
 # Set neovim as the default editor
 export EDITOR=nvim
+# Configure gpg agent to handle ssh keys
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 # Set GPG TTY for GPG key operations
 export GPG_TTY=$(tty)
 # Set locale settings for consistent UTF-8 encoding

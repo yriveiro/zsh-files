@@ -5,6 +5,8 @@
 # Basic Shell Configuration
 #------------------------------------------------------------------------------
 
+export TERM=xterm-kitty
+
 # Enable extended pattern matching features
 # This allows for more advanced file globbing patterns
 setopt extended_glob
