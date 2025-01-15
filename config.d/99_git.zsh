@@ -91,7 +91,7 @@ function gcb() {
   success "${YELLOW}${branch_name}${RESET} ready to track ${YELLOW}origin/${branch_name}${RESET}"
 
   # Setup tracking
-  git fetch -q origin &> /dev/null
+  git fetch -q origin
   git branch -q --set-upstream-to="origin/${branch_name}" "${branch_name}"
 
   success "${YELLOW}${repository}${RESET} ready to use"
@@ -113,6 +113,33 @@ function gwa() {
   fi
 
   git worktree add -q "${branch}" || {
+    err "Failed to add worktree for ${YELLOW}${branch}${RESET}"
+    return 1
+  }
+
+  success "${YELLOW}${branch}${RESET} ready to use"
+  cd "${branch}" || {
+    err "Failed to enter ${YELLOW}${branch}${RESET}"
+    return 1
+  }
+}
+
+# ------------------------------------------------------------------------------
+# Git Worktree Add Remote
+# Adds a new worktree for a specific remote branch
+# ------------------------------------------------------------------------------
+# Usage: gwar <branch_name>
+# Args:
+#   branch_name: Name of the branch for the new worktree
+function gwar() {
+  local branch=${1}
+
+  if [[ -z "${branch}" ]]; then
+    err "Worktree name is required"
+    return 1
+  fi
+
+  git worktree add -b "${branch}" --track "origin/${branch}" "${branch}" || {
     err "Failed to add worktree for ${YELLOW}${branch}${RESET}"
     return 1
   }
