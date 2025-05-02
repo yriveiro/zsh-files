@@ -44,3 +44,5 @@ PATH_ADDITIONS=(
 )
 # Join array elements with ':' and add to PATH
 export PATH="${(j/:/)PATH_ADDITIONS}:${PATH}"
+
+export OLLAMA_API_BASE=https://ollama.4425017.work
