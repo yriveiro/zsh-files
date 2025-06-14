@@ -20,11 +20,11 @@ alias ..="cd .."
 # File Listing Enhancements
 # Modern alternatives to ls command using exa if available
 # ------------------------------------------------------------------------------
-if command exa &> /dev/null; then
-    alias l="exa -l --icons"
-    alias la="exa -la --icons"
-    alias ll="exa -l -L=2 -T --icons"
-    alias lll="exa -l -L=3 -T --icons"
+if command eza &> /dev/null; then
+    alias l="eza -l --icons"
+    alias la="eza -la --icons"
+    alias ll="eza -l -L=2 -T --icons"
+    alias lll="eza -l -L=3 -T --icons"
 fi
 
 # ------------------------------------------------------------------------------
@@ -54,6 +54,7 @@ alias reload="source ~/.zshrc"
 # ------------------------------------------------------------------------------
 # Terraform shortcuts
 if command terraform -version &> /dev/null; then
+    alias tf="terraform"
     alias tfv="terraform validate"
     alias tfp="terraform plan"
     alias tfa="terraform apply"
@@ -70,6 +71,11 @@ if command kubectl &> /dev/null; then
     alias kr="kubectl delete"
 fi
 
+if command switcher -v &> /dev/null; then
+    alias kctx="switcher"
+    alias kns="switcher namespace"
+fi
+
 # tmux shortcuts
 if command tmux -V &> /dev/null; then
     alias mu="tmux"
@@ -84,3 +90,5 @@ fi
 
 # YubiKey utilities
 alias yubikey-scan="gpg-connect-agent \"scd serialno\" \"learn --force\" /bye"
+
+alias dump="cd ~/Dump"
