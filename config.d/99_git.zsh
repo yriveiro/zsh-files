@@ -139,7 +139,7 @@ function gwar() {
     return 1
   fi
 
-  git worktree add -b "${branch}" --track "origin/${branch}" "${branch}" || {
+  git worktree add "${branch}" "${branch}" || {
     err "Failed to add worktree for ${YELLOW}${branch}${RESET}"
     return 1
   }
@@ -147,6 +147,11 @@ function gwar() {
   success "${YELLOW}${branch}${RESET} ready to use"
   cd "${branch}" || {
     err "Failed to enter ${YELLOW}${branch}${RESET}"
+    return 1
+  }
+
+  git branch --set-upstream-to="origin/${branch}" "${branch}" || {
+    err "Failed to setup tracking for ${YELLOW}${branch}${RESET} to ${YELLOW}origin/${branch}${RESET}"
     return 1
   }
 }
