@@ -62,3 +62,19 @@ function patch_bare() {
     return 1
   }
 }
+
+function wtr() {
+  if [[ -z "${1}" ]]; then
+    err "Workspace name can't be empty"
+    return 1
+  fi
+
+  local name="${1}"
+
+  command wezterm cli rename-workspace "${name}" &> /dev/null || {
+    err "Failed to rename Wezterm workspace"
+    return 1
+  }
+
+  success "Wezterm workspace renamed to ${name}"
+}
