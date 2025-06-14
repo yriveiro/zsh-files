@@ -29,3 +29,6 @@ alias brewup="brew update && brew upgrade && brew cleanup && brew autoremove"
 # ------------------------------------------------------------------------------
 alias net-speed="networkQuality -v -p"
 alias mk="make"
+
+# YubiKey utilities
+alias yubikey-scan="gpg-connect-agent \"scd serialno\" \"learn --force\" /bye"
