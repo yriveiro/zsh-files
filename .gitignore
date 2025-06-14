@@ -1,3 +1,4 @@
 # Ensure we track local folder but not content
 config.local.d/*
 config.local.d/.gitkeep
+.DS_Store
