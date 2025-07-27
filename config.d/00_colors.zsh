@@ -72,7 +72,7 @@ NOTE="${BLUE}${INFO}${RESET}"
 
 # Info and error message functions with consistent styling
 function info() {
-  printf "${CYAN}${INFO} [INFO]${RESET}: ${1}\n" 2>&1
+  printf "${CYAN}${BELL} [INFO]${RESET}: ${1}\n" 2>&1
 }
 
 function err() {
