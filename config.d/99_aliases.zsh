@@ -122,7 +122,6 @@ alias gpl="git pull"
 alias gps="git push"
 alias gst="git st"
 alias gw="git worktree"
-alias gwl="git worktree list"
 alias lg="lazygit --use-config-dir ${HOME}/.config/lazygit/"
 
 # ------------------------------------------------------------------------------
