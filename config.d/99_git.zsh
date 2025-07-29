@@ -155,7 +155,7 @@ function gwa() {
   }
 
   [[ -d "${wt}/${branch}" ]] && {
-    err "Worktree ${YELLOW}${branch}${RESET} already exists at ${wt}/${branch}"
+    err "Worktree ${YELLOW}${branch}${RESET} already exists at ${YELLOW}${wt:t}/$branch${RESET}"
     return 1
   }
 
@@ -165,7 +165,7 @@ function gwa() {
       return 1
     }
 
-    git worktree add -b "${branch}" "${wt}/${branch}" "origin/${branch}"
+    git worktree add -b "${branch}" "${wt}/${branch}" "origin/${branch}" >/dev/null 2>&1
 
     git branch -q --set-upstream-to="origin/${branch}" "${branch}" 2>/dev/null && {
       info "Tracking set to ${YELLOW}origin/${branch}${RESET}"
@@ -184,12 +184,16 @@ function gwa() {
     return 1
   }
 
-  success "${YELLOW}${branch}${RESET} worktree created at ${wt:t}/${branch}"
+  success "${YELLOW}${branch}${RESET} worktree created at ${YELLOW}${wt:t}/${branch}${RESET}"
 
   cd "${wt}/${branch}" || { 
     err "Failed to enter ${YELLOW}${branch}${RESET}"
     return 1
   }
+
+  local commit=$(git -C . log -1 --oneline)
+
+  info "${YELLOW}dev${RESET} is now ${MAGENTA}${commit}${RESET}"
 }
 
 # ------------------------------------------------------------------------------
@@ -197,7 +201,7 @@ function gwa() {
 # Description: Safely removes a git worktree and its associated local branch.
 #              Automatically moves to repository root before removal to avoid conflicts.
 #              Only removes local branches - remote branches are preserved for safety.
-# Parameters:
+# Parameters 
 #   branch_name       : Name of the worktree/branch to remove (required)
 # Safety Features:
 #   - Moves to git root before removal to avoid "current directory" conflicts
@@ -281,4 +285,53 @@ gws() {
   }
 
   cd "$wt/${branch}" && success "Switched to worktree ${YELLOW}${branch}${RESET}"
+}
+
+# ------------------------------------------------------------------------------
+# Git Worktree List
+# Description: Displays all git worktrees in a clean, organized format with color coding.
+#              Shows the relationship between worktree directories and their associated branches.
+#              Useful for getting an overview of all active development contexts.
+# Parameters:
+#   None                      : Takes no arguments
+# Prerequisites:
+#   - Must be run from within a git repository
+#   - Worktrees must exist (bare repositories show all worktrees)
+# Output Format:
+#   Git worktrees:
+#     directory-name -> branch-name
+#     main -> main
+#     feature-auth -> feature/authentication
+# Color Coding:
+#   - Directory names displayed in cyan for easy identification
+#   - Branch names displayed in yellow to distinguish from directories
+#   - Clear visual separation with arrow notation
+# Examples:
+#   gwl                        # List all worktrees in current repository
+# Use Cases:
+#   - Quick overview of all active development branches
+#   - Verify worktree structure before switching contexts
+#   - Identify which directories correspond to which branches
+# Related:
+#   Use 'gws <branch>' to switch to a specific worktree
+#   Use 'gwa <branch>' to create new worktrees
+#   Use 'gwr <branch>' to remove worktrees
+# ------------------------------------------------------------------------------
+gwl() {
+  _validate_git_repo || return 1
+
+  local -a out
+  out=("${(@f)$(git worktree list)}")
+
+  for line in "${out[@]}"; do
+    local -a segments=("${=line}")
+
+    # Extract branch name: get 2nd element, strip [ and ] brackets
+    local branch="${${${segments[3]:-}#\[}%\]}"
+
+    [[ -n "$branch" && "$branch" != "(bare)" ]] && {
+      # Display: split path by /, take segments -2 to -1, join with /, format as "$project_worktree_base/worktree -> branch"
+      echo -e "  ${CYAN}${(j:/:)${(@s:/:)segments[1]}[-2,-1]}${RESET} -> ${YELLOW}${branch}${RESET}"
+    }
+  done
 }
