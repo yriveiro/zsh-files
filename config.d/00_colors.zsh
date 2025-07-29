@@ -87,6 +87,11 @@ function debug() {
   printf "${MAGENTA}${DEBUG} [DEBUG]${RESET}: ${1}\n" 2>&1
 }
 
+debug() {
+  [[ -z "$DEBUG" || "$DEBUG" == 1 ]] && return
+  printf "${MAGENTA}${DEBUG} [DEBUG]${RESET}: ${1}\n" >&2
+}
+
 function success() {
   printf "${GREEN}${SUCCESS} [SUCCESS]${RESET}: ${1}\n" 2>&1
 }
