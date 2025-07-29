@@ -251,7 +251,7 @@ function gwr() {
 #              Validates worktree exists before switching and provides clear feedback.
 #              Useful for rapidly switching between different feature branches or contexts.
 # Parameters:
-#   branch_name       : Name of the worktree/branch to switch to (required)
+#   branch_name: Name of the worktree/branch to switch to (required)
 # Prerequisites:
 #   - Must be run from within a git repository
 #   - Target worktree must exist (created via gwa)
@@ -260,9 +260,9 @@ function gwr() {
 #   - Confirms worktree directory exists before attempting to switch
 #   - Provides clear error messages for troubleshooting
 # Examples:
-#   gws main                    # Switch to main worktree
-#   gws feature-auth           # Switch to feature-auth worktree
-#   gws bugfix-123             # Switch to bugfix worktree
+#   gws main           # Switch to main worktree
+#   gws feature-auth   # Switch to feature-auth worktree
+#   gws bugfix-123     # Switch to bugfix worktree
 # Related:
 #   Use 'gwl' to list available worktrees
 #   Use 'gwa' to create new worktrees
