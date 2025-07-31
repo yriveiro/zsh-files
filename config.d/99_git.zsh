@@ -165,6 +165,11 @@ function gwa() {
       return 1
     }
 
+    _local_branch_exists "$branch" && {
+      err "Local branch ${YELLOW}${branch}${RESET} already exists. Use a different name or delete the local branch first."
+      return 1
+    }
+
     git worktree add -b "${branch}" "${wt}/${branch}" "origin/${branch}" >/dev/null 2>&1
 
     git branch -q --set-upstream-to="origin/${branch}" "${branch}" 2>/dev/null && {
@@ -174,6 +179,7 @@ function gwa() {
     }
   else
     if _local_branch_exists "$branch"; then
+      info "Using existing ${YELLOW}${branch}${RESET} from current HEAD"
       git worktree add -q "${wt}/${branch}" "${branch}"
     else
       info "Creating new branch ${YELLOW}${branch}${RESET} from current HEAD"
@@ -186,7 +192,7 @@ function gwa() {
 
   success "${YELLOW}${branch}${RESET} worktree created at ${YELLOW}${wt:t}/${branch}${RESET}"
 
-  cd "${wt}/${branch}" || { 
+  cd "${wt}/${branch}" || {
     err "Failed to enter ${YELLOW}${branch}${RESET}"
     return 1
   }
