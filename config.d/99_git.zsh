@@ -65,7 +65,7 @@ _local_branch_exists() {
 #   gc -s username/repo gitlab.com https
 #   gc username/repo github.com ssh
 # ------------------------------------------------------------------------------
-function gc() {
+function gwc() {
   local params="--bare"
 
   while [[ $# -gt 0 ]]; do
