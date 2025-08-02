@@ -239,8 +239,8 @@ if command kubectl &> /dev/null; then
 fi
 
 if command switcher -v &> /dev/null; then
-    alias kctx="switcher"
-    alias kns="switcher namespace"
+    alias kctx="switch"
+    alias kns="switch namespace"
 fi
 
 # ------------------------------------------------------------------------------
