@@ -27,8 +27,6 @@ export DYLD_LIBRARY_PATH="${HOMEBREW_PREFIX}/lib:${DYLD_LIBRARY_PATH}"
 # ------------------------------------------------------------------------------
 # Rust configuration
 export RUST_SRC_PATH="/usr/local/src/rustc/src"
-# Java configuration
-export JAVA_HOME="${HOMEBREW_PREFIX}/opt/openjdk/libexec/openjdk.jdk/Contents/Home"
 # LSP configuration
 export JDTLS_HOME="${HOME}/.local/share/nvim/lsp_servers/jdtls"
 
