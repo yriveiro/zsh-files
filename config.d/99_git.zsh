@@ -239,6 +239,11 @@ function gwr() {
 
   git worktree remove "${wt}/${branch}" || {
     err "Failed to remove worktree ${YELLOW}${branch}${RESET}"
+
+    cd "${wt}/${branch}" || {
+      err "Failed to move back to ${YELLOW}"${wt}/${branch}"${RESET} worktree"
+    }
+
     return 1
   }
 
