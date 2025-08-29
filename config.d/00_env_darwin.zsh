@@ -37,6 +37,8 @@ export JDTLS_HOME="${HOME}/.local/share/nvim/lsp_servers/jdtls"
 PATH_ADDITIONS=(
     "${HOMEBREW_PREFIX}/bin"                       # Brew
     "${HOMEBREW_PREFIX}/opt/gnu-getopt/bin"        # GNU getopt
+    "${HOMEBREW_PREFIX}/opt/php@8.3/bin"           # PHP
+    "${HOMEBREW_PREFIX}/opt/php@8.3/sbin"           # PHP
     "${HOME}/.krew/bin"                            # Kubernetes krew plugin
     "${HOME}/.local/bin"                           # User local binaries
     "/usr/local/bin/go"                            # Go binary
