@@ -29,6 +29,7 @@ export DYLD_LIBRARY_PATH=${HOMEBREW_PREFIX}/lib:${DYLD_LIBRARY_PATH}
 export RUST_SRC_PATH="/usr/local/src/rustc/src"
 # LSP configuration
 export JDTLS_HOME="${HOME}/.local/share/nvim/lsp_servers/jdtls"
+export JDTLS_HOME="${HOME}/.local/share/nvim/mason/packages/jdtls"
 
 # ------------------------------------------------------------------------------
 # PATH Configuration
