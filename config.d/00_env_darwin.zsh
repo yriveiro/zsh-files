@@ -18,9 +18,9 @@ export DEV_ROOT="${HOME}/Development"
 # Homebrew Configuration
 # ------------------------------------------------------------------------------
 # Get Homebrew prefix for consistent path references
-HOMEBREW_PREFIX="$(brew --prefix)"
+HOMEBREW_PREFIX="$(/opt/homebrew/bin/brew --prefix)"
 # Configure dynamic library path for macOS
-export DYLD_LIBRARY_PATH="${HOMEBREW_PREFIX}/lib:${DYLD_LIBRARY_PATH}"
+export DYLD_LIBRARY_PATH=${HOMEBREW_PREFIX}/lib:${DYLD_LIBRARY_PATH}
 
 # ------------------------------------------------------------------------------
 # Development Tools Configuration
@@ -35,10 +35,11 @@ export JDTLS_HOME="${HOME}/.local/share/nvim/lsp_servers/jdtls"
 # ------------------------------------------------------------------------------
 # Define additional PATH entries
 PATH_ADDITIONS=(
-    "/usr/local/bin/go"                            # Go binary
+    "${HOMEBREW_PREFIX}/bin"                       # Brew
     "${HOMEBREW_PREFIX}/opt/gnu-getopt/bin"        # GNU getopt
     "${HOME}/.krew/bin"                            # Kubernetes krew plugin
     "${HOME}/.local/bin"                           # User local binaries
+    "/usr/local/bin/go"                            # Go binary
 )
 # Join array elements with ':' and add to PATH
 export PATH="${(j/:/)PATH_ADDITIONS}:${PATH}"
