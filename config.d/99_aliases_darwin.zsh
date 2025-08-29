@@ -219,4 +219,8 @@ alias mk="make"
 #   - Some operations may require physical touch confirmation on YubiKey
 #   - Compatible with both GPG and SSH authentication workflows
 # ------------------------------------------------------------------------------
+
+alias nctl="colima nerdctl"
+
+# YubiKey utilities
 alias yubikey-scan="gpg-connect-agent \"scd serialno\" \"learn --force\" /bye"
