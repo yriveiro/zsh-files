@@ -24,7 +24,7 @@ _find_git_root() {
 # Returns: Branch name string, defaults to "main" if none found
 # ------------------------------------------------------------------------------
 _default_branch() {
-    git branch -r | grep -E 'origin/(main|master)$' | head -1 | cut -d/ -f2 || echo "main"
+    git branch -r | grep -E '^[[:space:]]*origin/(main|master)$' | head -1 | cut -d/ -f2 || echo "main"
 }
 
 _validate_git_repo() {
@@ -199,7 +199,7 @@ function gwa() {
 
   local commit=$(git -C . log -1 --oneline)
 
-  info "${YELLOW}dev${RESET} is now ${MAGENTA}${commit}${RESET}"
+  info "${YELLOW}${branch}${RESET} worktree HEAD points now to: ${MAGENTA}${commit}${RESET}"
 }
 
 # ------------------------------------------------------------------------------
