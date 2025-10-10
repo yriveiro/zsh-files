@@ -190,58 +190,63 @@ function wtr() {
 #
 # FEATURES:
 #   - Automatically creates .venv if it doesn't exist
-#   - Smart activation with project-based prompt customization
-#   - Clean deactivation with ctrl+d
+#   - Activates virtual environment in the current shell
+#   - Preserves all shell completions and configurations
+#   - Custom prompt showing project name and Python version
+#   - Standard deactivation with 'deactivate' command
 #   - Visual emoji indicators for each operation
 #
 # ENVIRONMENT:
 #   Sets the following environment variables when activated:
 #   - VIRTUAL_ENV: Path to the activated virtual environment
 #   - VIRTUAL_ENV_PROMPT: Custom prompt showing project name and Python version
+#   - PATH: Prepended with virtual environment's bin directory
 #
 # EXAMPLES:
 #   $ cd my-project
 #   $ uv shell           # Creates and activates .venv with custom prompt
 #   🐍 my-project-py3.10 $ # Now in the virtual environment
-#   🐍 my-project-py3.10 $ # Press ctrl+d to exit
+#   🐍 my-project-py3.10 $ deactivate  # Exit the virtual environment
 #   $ # Back to normal prompt
 #
 #   $ uv pip install requests  # Standard UV command passthrough
 #
 # NOTES:
-#   - Uses bash emulation for activation, compatible with various shells
+#   - Activates in the current shell, preserving all configurations
 #   - Project name is derived from the current directory
-#   - Automatically cleans up environment variables on exit
+#   - Automatically reinitializes completions after activation
+#   - Use the standard 'deactivate' command to exit the virtual environment
 # ------------------------------------------------------------------------------
 function uv() {
     if [[ "$1" == "shell" ]]; then
         local venv_path=".venv"
         local project_name=${PWD##*/}  # Extract current directory name
+
         # Check if .venv directory exists
         if [[ ! -d "$venv_path" ]]; then
             # Create new virtual environment if it doesn't exist
             echo "🔧 Creating new virtual environment..."
             command uv venv "$venv_path"
         fi
+
         # Check if .venv directory exists
         if [[ -d "$venv_path" ]]; then
-            # Activate existing virtual environment using bash emulation
+            # Activate virtual environment in the current shell
             echo "🚀 Activating virtual environment at $venv_path"
-            # Print deactivation instructions
-            echo "💡 To deactivate, hit ctrl + d"
+            echo "💡 To deactivate, run 'deactivate'"
+
             # Get Python version
             local py_version=$($venv_path/bin/python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
-            # Export these variables to the new shell
-            export VIRTUAL_ENV="$PWD/$venv_path"
+
+            # Activate in the current shell (preserves all configurations)
+            source "$venv_path/bin/activate"
+
+            # Set custom prompt
             export VIRTUAL_ENV_PROMPT="🐍 $project_name-py$py_version"
-            # Activate and spawn new shell
-            $SHELL -c "emulate bash -c '. $venv_path/bin/activate'; exec $SHELL"
-            # After hit ctrl + d, clean up the prompt
-            if [[ -n "$VIRTUAL_ENV" ]]; then 
-                echo "👋 Deactivated virtual environment"
-                unset VIRTUAL_ENV
-                unset VIRTUAL_ENV_PROMPT
-            fi
+
+            # Reinitialize completions to restore all autocompletions
+            autoload -Uz compinit
+            compinit
         else
             echo "❌ Failed to create virtual environment at $venv_path"
         fi
