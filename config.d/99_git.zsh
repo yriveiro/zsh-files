@@ -12,10 +12,15 @@
 # Returns: Path to git root directory or exits with error if not in a git repo
 # ------------------------------------------------------------------------------
 _find_git_root() {
-  git worktree list 2>/dev/null | awk '{print $1; exit}' || {
+  local root
+  root=$(git worktree list 2>/dev/null | awk '{print $1; exit}')
+
+  [[ -z "${root}" ]] && {
     err "Not inside a git repository"
     return 1
   }
+
+  echo "${root}"
 }
 
 # ------------------------------------------------------------------------------
@@ -24,7 +29,10 @@ _find_git_root() {
 # Returns: Branch name string, defaults to "main" if none found
 # ------------------------------------------------------------------------------
 _default_branch() {
-    git branch -r | grep -E '^[[:space:]]*origin/(main|master)$' | head -1 | cut -d/ -f2 || echo "main"
+  local branch
+  branch=$(git branch -r 2>/dev/null | grep -E '^[[:space:]]*origin/(main|master)$' | head -1 | cut -d/ -f2)
+
+  echo "${branch:-main}"
 }
 
 _validate_git_repo() {
@@ -91,7 +99,6 @@ function gwc() {
   case $protocol in
     ssh) url="git@${host}:${repository}.git" ;;
     https) url="https://${host}/${repository}.git" ;;
-    *) err "Protocol ${RED}${protocol}${RESET} not supported" ||return 1
   esac
 
   git clone $params -q "$url" "$name" && cd "$name" || {
@@ -106,7 +113,7 @@ function gwc() {
   git config push.autoSetupRemote true
   git fetch -q origin
 
-  branch=$(_default_branch)
+  local branch=$(_default_branch)
 
   gwa $branch
 }
@@ -159,6 +166,16 @@ function gwa() {
     return 1
   }
 
+  info "Fetching latest remote state..."
+  git fetch origin --prune || { warn "Failed to fetch from origin"; }
+
+  local default=$(_default_branch)
+
+  if [[ -d "${wt}/${default}" ]]; then
+    info "Pulling latest changes in ${YELLOW}${default}${RESET}..."
+    git -C "${wt}/${default}" pull --ff-only || { warn "Failed to pull latest changes in ${YELLOW}${default}${RESET}"; }
+  fi
+
   if [[ "${remote}" == true ]]; then
     git show-ref --verify --quiet "refs/remotes/origin/${branch}" || {
       err "Remote branch ${YELLOW}origin/${branch}${RESET} does not exist"
@@ -197,7 +214,7 @@ function gwa() {
     return 1
   }
 
-  local commit=$(git -C . log -1 --oneline)
+  local commit=$(git log -1 --oneline)
 
   info "${YELLOW}${branch}${RESET} worktree HEAD points now to: ${MAGENTA}${commit}${RESET}"
 }
@@ -207,8 +224,9 @@ function gwa() {
 # Description: Safely removes a git worktree and its associated local branch.
 #              Automatically moves to repository root before removal to avoid conflicts.
 #              Only removes local branches - remote branches are preserved for safety.
-# Parameters 
+# Parameters:
 #   branch_name       : Name of the worktree/branch to remove (required)
+#   --force           : Force removal even with uncommitted changes (optional)
 # Safety Features:
 #   - Moves to git root before removal to avoid "current directory" conflicts
 #   - Validates worktree exists before attempting removal
@@ -216,32 +234,48 @@ function gwa() {
 #   - Provides clear feedback on each operation
 # Examples:
 #   gwr feature-branch          # Remove feature-branch worktree and local branch
+#   gwr feature-branch --force  # Force remove worktree with uncommitted changes
 #   gwr old-experiment          # Clean up completed work
 # ------------------------------------------------------------------------------
 function gwr() {
-  local branch=${1:?"Branch name is required"}
-  local root=$(_find_git_root)
-  local repository="${root:t}"
-  local wt="${root:h}/${repository}-worktrees"
+  local force=false
+  local branch
+
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --force) force=true; shift ;;
+      -*) err "Invalid option: $1"; return 1 ;;
+      *) branch="${branch:-$1}"; shift ;;
+    esac
+  done
+
+  [[ -z "${branch}" ]] && { err "Branch name is required"; return 1; }
 
   _validate_git_repo || return 1
 
+  local wt=$(_get_worktree_dir)
 
   [[ ! -d "${wt}/${branch}" ]] && {
-    err "Worktree ${YELLOW}${branch}${RESET} does not exist at ${YELLOW}${repository}-worktrees/${branch}${RESET}"
+    err "Worktree ${YELLOW}${branch}${RESET} does not exist at ${YELLOW}${wt:t}/${branch}${RESET}"
     return 1
   }
+
+  local root=$(_find_git_root)
 
   cd "${root}" || {
     err "Failed to move to repository root"
     return 1
   }
 
-  git worktree remove "${wt}/${branch}" || {
+  local remove_args=("${wt}/${branch}")
+  ${force} && remove_args+=(--force)
+
+  git worktree remove "${remove_args[@]}" || {
     err "Failed to remove worktree ${YELLOW}${branch}${RESET}"
+    ${force} || info "Use ${YELLOW}gwr ${branch} --force${RESET} to remove with uncommitted changes"
 
     cd "${wt}/${branch}" || {
-      err "Failed to move back to ${YELLOW}"${wt}/${branch}"${RESET} worktree"
+      err "Failed to move back to ${YELLOW}${wt}/${branch}${RESET} worktree"
     }
 
     return 1
@@ -295,7 +329,112 @@ gws() {
     return 1
   }
 
-  cd "$wt/${branch}" && success "Switched to worktree ${YELLOW}${branch}${RESET}"
+  cd "$wt/${branch}" || {
+    err "Failed to switch to worktree ${YELLOW}${branch}${RESET}"
+    return 1
+  }
+
+  success "Switched to worktree ${YELLOW}${branch}${RESET}"
+
+  local default=$(_default_branch)
+
+  if [[ "${branch}" == "${default}" ]]; then
+    info "Pulling latest changes for ${YELLOW}${default}${RESET}..."
+    git pull --ff-only || warn "Failed to pull latest changes"
+  fi
+}
+
+# ------------------------------------------------------------------------------
+# Git Worktree Rebase
+# Description: Rebases the current worktree branch onto the latest default branch (main/master).
+#              Fetches and updates the default branch before rebasing to ensure a clean rebase.
+#              Must be run from within a worktree (not the bare repo root).
+# Parameters:
+#   None                      : Takes no arguments, operates on current worktree branch
+# Prerequisites:
+#   - Must be run from within a git worktree (not the bare repo)
+#   - The default branch worktree (main/master) must exist
+# Workflow:
+#   1. Validates git repository context
+#   2. Detects the current branch and ensures it's not the default branch
+#   3. Fetches latest remote state
+#   4. Updates the default branch worktree with latest changes
+#   5. Rebases the current branch onto the updated default branch
+# Safety Features:
+#   - Auto-stashes uncommitted changes before rebasing and restores them after
+#   - Prevents rebasing the default branch onto itself
+#   - Validates worktree and branch state before proceeding
+#   - Provides clear feedback at each step
+#   - On rebase conflict, advises the user on how to proceed
+# Examples:
+#   gwb                        # Rebase current worktree branch onto main
+# Related:
+#   Use 'gws <branch>' to switch to a worktree before rebasing
+#   Use 'gwl' to list available worktrees
+# ------------------------------------------------------------------------------
+gwb() {
+  _validate_git_repo || return 1
+
+  local current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+
+  [[ -z "${current_branch}" ]] && {
+    err "Could not determine current branch"
+    return 1
+  }
+
+  local default=$(_default_branch)
+  local wt=$(_get_worktree_dir)
+  local rebase_target="${default}"
+
+  [[ "${current_branch}" == "${default}" ]] && {
+    err "Cannot rebase ${YELLOW}${default}${RESET} onto itself"
+    return 1
+  }
+
+  info "Fetching latest remote state..."
+  git fetch origin --prune || { warn "Failed to fetch from origin"; }
+
+  if [[ -d "${wt}/${default}" ]]; then
+    info "Updating ${YELLOW}${default}${RESET} worktree..."
+    git -C "${wt}/${default}" pull --ff-only || {
+      warn "Failed to fast-forward ${YELLOW}${default}${RESET}, rebase will use current local state"
+    }
+  else
+    warn "Default branch worktree ${YELLOW}${default}${RESET} not found at ${YELLOW}${wt:t}/${default}${RESET}"
+    rebase_target="origin/${default}"
+    info "Rebasing onto ${YELLOW}${rebase_target}${RESET} directly"
+  fi
+
+  local stashed=false
+  if ! git diff --quiet || ! git diff --cached --quiet; then
+    info "Stashing uncommitted changes..."
+    git stash push -m "gwb: auto-stash before rebase onto ${rebase_target}" || {
+      err "Failed to stash changes, aborting rebase"
+      return 1
+    }
+    stashed=true
+  fi
+
+  info "Rebasing ${YELLOW}${current_branch}${RESET} onto ${YELLOW}${rebase_target}${RESET}..."
+
+  git rebase "${rebase_target}" && {
+    local commit=$(git log -1 --oneline)
+    success "${YELLOW}${current_branch}${RESET} rebased onto ${YELLOW}${rebase_target}${RESET}"
+    info "HEAD now at: ${MAGENTA}${commit}${RESET}"
+  } || {
+    warn "Rebase encountered conflicts"
+    info "Resolve conflicts, then run ${YELLOW}git rebase --continue${RESET}"
+    info "To abort the rebase, run ${YELLOW}git rebase --abort${RESET}"
+    ${stashed} && info "Stashed changes will need to be restored with ${YELLOW}git stash pop${RESET} after resolving"
+    return 1
+  }
+
+  ${stashed} && {
+    info "Restoring stashed changes..."
+    git stash pop || {
+      warn "Failed to restore stashed changes, they remain in the stash"
+    }
+  }
 }
 
 # ------------------------------------------------------------------------------
