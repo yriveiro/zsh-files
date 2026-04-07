@@ -1,7 +1,7 @@
 #!/bin/zsh -f
 
 # Remove duplicates in these arrays
-typeset -U path cdpath fpath manpath
+
 
 ####################
 # Input/Terminal Control
@@ -14,6 +14,14 @@ setopt prompt_subst     # Allow substitution in prompt
 ####################
 # History (Atuin Optimized)
 ####################
+# Store history in XDG state directory, keep a large history and reduce duplicates
+HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
+mkdir -p "${HISTFILE:h}"
+HISTSIZE=100000
+SAVEHIST=100000
+setopt hist_ignore_all_dups
+setopt hist_expire_dups_first
+setopt hist_reduce_blanks
 setopt extended_history    # Save timestamp and duration
 setopt inc_append_history  # Write immediately, better for Atuin integration
 setopt hist_verify        # Don't execute immediately upon history expansion

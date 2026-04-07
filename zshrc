@@ -5,7 +5,7 @@
 # Basic Shell Configuration
 #------------------------------------------------------------------------------
 
-export TERM=xterm-kitty
+export TERM=wezterm
 
 # Enable extended pattern matching features
 # This allows for more advanced file globbing patterns
@@ -42,7 +42,7 @@ done
 # Load machine-specific local configurations if they exist
 # This allows for custom settings per machine without affecting the main config
 if [[ -d "${HOME}/.config/zsh/config.local.d/" ]]; then
-  for f in "${HOME}/.config/zsh/config.local.d/"*; do
+  for f in ${HOME}/.config/zsh/config.local.d/*(N); do
       source "${f}"
   done
 fi
@@ -57,8 +57,16 @@ zle_highlight=('paste:none')
 
 # Configure and initialize Starship prompt
 # Starship provides a minimal, fast, and customizable prompt
-export STARSHIP_CONFIG=~/.config/starship.toml
-eval "$(starship init zsh)"
+export STARSHIP_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
+() {
+    local _cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/starship-init.zsh"
+    local _bin="${commands[starship]}"
+    if [[ -n "$_bin" && ( ! -f "$_cache" || "$_bin" -nt "$_cache" ) ]]; then
+        mkdir -p "${_cache:h}"
+        starship init zsh >| "$_cache"
+    fi
+    [[ -f "$_cache" ]] && source "$_cache"
+}
 
 #------------------------------------------------------------------------------
 # Development Tools Configuration
@@ -68,7 +76,7 @@ eval "$(starship init zsh)"
 # Only load if running on macOS system
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # Define Homebrew installation path
-    local gcloud_path="$(brew --prefix)/share/google-cloud-sdk"
+    gcloud_path="${HOMEBREW_PREFIX}/share/google-cloud-sdk"
 
     # Source Google Cloud SDK files if they exist
     if [[ -d "$gcloud_path" ]]; then
@@ -78,28 +86,55 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 
 #------------------------------------------------------------------------------
-# Command Completion Setup
-#------------------------------------------------------------------------------
-
-# Initialize bash completion compatibility
-# This is required for some tools that only provide bash completions
-autoload -U +X bashcompinit && bashcompinit
-
-#------------------------------------------------------------------------------
 # Shell History Management
 #------------------------------------------------------------------------------
 
 # Initialize Atuin for enhanced shell history
 # Atuin provides a better history search and sync capability
-eval "$(atuin init zsh)"
-source <(switcher init zsh)
+() {
+    local _cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/atuin-init.zsh"
+    local _bin="${commands[atuin]}"
+    if [[ -n "$_bin" && ( ! -f "$_cache" || "$_bin" -nt "$_cache" ) ]]; then
+        mkdir -p "${_cache:h}"
+        atuin init zsh >| "$_cache"
+    fi
+    [[ -f "$_cache" ]] && source "$_cache"
+}
+
+() {
+    local _cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/switcher-init.zsh"
+    local _bin="${commands[switcher]}"
+    if [[ -n "$_bin" && ( ! -f "$_cache" || "$_bin" -nt "$_cache" ) ]]; then
+        mkdir -p "${_cache:h}"
+        switcher init zsh >| "$_cache"
+    fi
+    [[ -f "$_cache" ]] && source "$_cache"
+}
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/yagoriveiro/Dump/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/yagoriveiro/Dump/google-cloud-sdk/path.zsh.inc'; fi
+# if [ -f '/Users/yagoriveiro/Dump/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/yagoriveiro/Dump/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/yagoriveiro/Dump/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/yagoriveiro/Dump/google-cloud-sdk/completion.zsh.inc'; fi
+# if [ -f '/Users/yagoriveiro/Dump/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/yagoriveiro/Dump/google-cloud-sdk/completion.zsh.inc'; fi
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# bun completions
+[ -s "/Users/yagoriveiro/.bun/_bun" ] && source "/Users/yagoriveiro/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+path=("$BUN_INSTALL/bin" $path)
+
+# zoxide
+() {
+    local _cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zoxide-init.zsh"
+    local _bin="${commands[zoxide]}"
+    if [[ -n "$_bin" && ( ! -f "$_cache" || "$_bin" -nt "$_cache" ) ]]; then
+        mkdir -p "${_cache:h}"
+        zoxide init zsh --cmd j >| "$_cache"
+    fi
+    [[ -f "$_cache" ]] && source "$_cache"
+}

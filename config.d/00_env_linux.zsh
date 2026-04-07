@@ -9,6 +9,9 @@
 # Skip if not running on Linux
 [[ "${OSTYPE}" == "linux"* ]] || return
 
+# Remove duplicates in these arrays before any PATH mutations
+typeset -U path cdpath fpath manpath
+
 # ------------------------------------------------------------------------------
 # Development Root Directory
 # ------------------------------------------------------------------------------
@@ -19,8 +22,9 @@ export DEV_ROOT="/data/Development"
 # ------------------------------------------------------------------------------
 # Java configuration
 export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
+
 # Docker configuration
-export DOCKER_DEFAULT_PLATFORM="linux/amd64"
+# export DOCKER_DEFAULT_PLATFORM="linux/amd64"
 
 # ------------------------------------------------------------------------------
 # PATH Configuration
@@ -33,5 +37,5 @@ PATH_ADDITIONS=(
 # Add kubebuilder to PATH if directory exists
 [[ -d "/usr/local/kubebuilder/bin" ]] && PATH_ADDITIONS+=("/usr/local/kubebuilder/bin")
 
-# Join array elements with ':' and add to PATH
-export PATH="${PATH}:${(j/:/)PATH_ADDITIONS}"
+# Append PATH_ADDITIONS to path array
+path=($path "${PATH_ADDITIONS[@]}")

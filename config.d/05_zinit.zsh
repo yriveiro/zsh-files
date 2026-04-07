@@ -31,8 +31,7 @@ zinit wait lucid for \
 # ------------------------------------------------------------------------------
 zinit wait lucid as"completion" for \
     dwaynebradley/k3d-oh-my-zsh-plugin \
-    MenkeTechnologies/zsh-cargo-completion \
-    sudosubin/zsh-poetry
+    MenkeTechnologies/zsh-cargo-completion
 
 # ------------------------------------------------------------------------------
 # Cloud Tool Completions
@@ -46,8 +45,8 @@ zinit wait lucid for \
 # Navigation and Utility Enhancements
 # Tools for improved navigation and kubernetes aliases
 # ------------------------------------------------------------------------------
-zinit wait lucid for \
-    agkozak/zsh-z
+# zinit wait lucid for \
+#     agkozak/zsh-z
 
 # ------------------------------------------------------------------------------
 # User Experience
@@ -58,5 +57,4 @@ zinit wait lucid for \
     zsh-users/zsh-history-substring-search \
     atload"_zsh_autosuggest_start" \
         zsh-users/zsh-autosuggestions \
-    atinit"zicompinit; zicdreplay" \
         zdharma-continuum/fast-syntax-highlighting

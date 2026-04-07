@@ -37,8 +37,8 @@ export HOMEBREW_BAT=1
 # ------------------------------------------------------------------------------
 # Set Go workspace directory
 export GOPATH="${DEV_ROOT}/go"
-# Add Go binary directory to PATH
-export PATH="${GOPATH}/bin:${PATH}"
+# Add Go binary directory to path array
+path=("${GOPATH}/bin" $path)
 
 # ------------------------------------------------------------------------------
 # Conditional Tool Configurations
@@ -46,5 +46,5 @@ export PATH="${GOPATH}/bin:${PATH}"
 # ------------------------------------------------------------------------------
 # Configure .NET if installed
 if command -v dotnet &> /dev/null; then
-    export DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec"
+    export DOTNET_ROOT="${HOMEBREW_PREFIX}/opt/dotnet/libexec"
 fi

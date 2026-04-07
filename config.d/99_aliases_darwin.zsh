@@ -224,3 +224,5 @@ alias nctl="colima nerdctl"
 
 # YubiKey utilities
 alias yubikey-scan="gpg-connect-agent \"scd serialno\" \"learn --force\" /bye"
+
+alias co="container"

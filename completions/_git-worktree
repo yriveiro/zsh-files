@@ -1,0 +1,136 @@
+#compdef gwc gwa gwr gws gwb gwl
+
+# ==============================================================================
+# Git Worktree Completions
+# Purpose: Zsh completions for git worktree management functions
+# Author: Yago Riveiro
+# Commands: gwc, gwa, gwr, gws, gwb, gwl
+# ==============================================================================
+
+# Helper function to find git root directory
+_git-worktree-root() {
+  local root
+  root=$(git worktree list 2>/dev/null | awk '{print $1; exit}')
+  [[ -n "$root" ]] && echo "$root"
+}
+
+# Helper function to get worktree directory
+_git-worktree-dir() {
+  local root=$(_git-worktree-root)
+  [[ -z "$root" ]] && return 1
+  local repository="${root:t}"
+  echo "${root:h}/${repository}-worktrees"
+}
+
+# Helper function to list existing worktrees
+_git-worktree-list() {
+  local wt=$(_git-worktree-dir)
+  [[ ! -d "$wt" ]] && return 1
+  
+  # List directories in worktree folder, excluding bare repo indicator
+  for dir in "$wt"/*(/N); do
+    local name="${dir:t}"
+    [[ "$name" != "(bare)" ]] && echo "$name"
+  done
+}
+
+# Helper function to get default branch
+_git-worktree-default-branch() {
+  local branch
+  branch=$(git branch -r 2>/dev/null | grep -E '^[[:space:]]*origin/(main|master)$' | head -1 | cut -d/ -f2)
+  echo "${branch:-main}"
+}
+
+# ==============================================================================
+# gwc - Git Worktree Clone
+# ==============================================================================
+_gwc() {
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    '(-s --standard)'{-s,--standard}'[Clone as standard repository (default is bare)]' \
+    '1:repository path:_files' \
+    '2:git host:(github.com gitlab.com bitbucket.org)' \
+    '3:protocol:(ssh https)'
+}
+
+# ==============================================================================
+# gwa - Git Worktree Add
+# ==============================================================================
+_gwa() {
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+  local -a branches
+
+  _arguments -C \
+    '(-r --remote)'{-r,--remote}'[Create worktree from existing remote branch with tracking]'
+
+  # If -r flag was used, suggest remote branches
+  if [[ -n ${opt_args[(I)-r|--remote]} ]]; then
+    # Get remote branches from origin only
+    branches=(${(f)"$(git branch -r 2>/dev/null | grep '^[[:space:]]*origin/' | sed 's/^[[:space:]]*origin\///' | grep -v 'HEAD')"})
+    _describe -t branches 'remote branch' branches
+  else
+    # Suggest local branches (existing branches that can be used)
+    branches=(${(f)"$(git branch --format='%(refname:short)' 2>/dev/null)"})
+    _describe -t branches 'local branch' branches
+  fi
+}
+
+# ==============================================================================
+# gwr - Git Worktree Remove
+# ==============================================================================
+_gwr() {
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+  local -a worktrees
+
+  worktrees=(${(f)$(_git-worktree-list)})
+
+  _arguments -C \
+    '--force[Force removal even with uncommitted changes]' \
+    "1:worktree:(${worktrees[*]})"
+}
+
+# ==============================================================================
+# gws - Git Worktree Switch
+# ==============================================================================
+_gws() {
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+  local -a worktrees
+
+  worktrees=(${(f)$(_git-worktree-list)})
+
+  _arguments -C \
+    "1:worktree:(${worktrees[*]})"
+}
+
+# ==============================================================================
+# gwb - Git Worktree Rebase
+# ==============================================================================
+_gwb() {
+  # No arguments needed
+  return 0
+}
+
+# ==============================================================================
+# gwl - Git Worktree List
+# ==============================================================================
+_gwl() {
+  # No arguments needed
+  return 0
+}
+
+# ==============================================================================
+# Main dispatcher
+# ==============================================================================
+case "$service" in
+  gwc) _gwc "$@" ;;
+  gwa) _gwa "$@" ;;
+  gwr) _gwr "$@" ;;
+  gws) _gws "$@" ;;
+  gwb) _gwb "$@" ;;
+  gwl) _gwl "$@" ;;
+esac
