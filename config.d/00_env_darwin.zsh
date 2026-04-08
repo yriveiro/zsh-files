@@ -19,20 +19,6 @@ else
     export HOMEBREW_PREFIX="/usr/local"
 fi
 
-# ------------------------------------------------------------------------------
-# Development Root Directory
-# ------------------------------------------------------------------------------
-export DEV_ROOT="${HOME}/Development"
-
-# ------------------------------------------------------------------------------
-# Homebrew Configuration
-# ------------------------------------------------------------------------------
-# 
-# This configurations is troublesome.
-#
-# Get Homebrew prefix for consistent path references
-# HOMEBREW_PREFIX="$(/opt/homebrew/bin/brew --prefix)"
-# Configure dynamic library path for macOS
 export DYLD_LIBRARY_PATH=${HOMEBREW_PREFIX}/lib:${DYLD_LIBRARY_PATH}
 
 # ------------------------------------------------------------------------------
@@ -60,13 +46,29 @@ PATH_ADDITIONS=(
 # Prepend PATH_ADDITIONS to path array
 path=("${PATH_ADDITIONS[@]}" $path)
 
-# ------------------------------------------------------------------------------
-# External Services Configuration
-# ------------------------------------------------------------------------------
-# Configure Ollama API endpoint for AI model interactions
-export OLLAMA_API_BASE=https://ollama.4425017.work
+() {
+    local gcloud_path="${HOMEBREW_PREFIX}/share/google-cloud-sdk"
 
-# Configure Docker to use Colima runtime instead of Docker Desktop
-export DOCKER_HOST=unix:///Users/yagoriveiro/.colima/default/docker.sock
+    [[ -d "${gcloud_path}" ]] || return
 
-export OPENCODE_EXPERIMENTAL=true
+    _load_gcloud_shell() {
+        unset -f _load_gcloud_shell gcloud gsutil bq
+        [[ -r "${gcloud_path}/path.zsh.inc" ]] && source "${gcloud_path}/path.zsh.inc"
+        [[ -r "${gcloud_path}/completion.zsh.inc" ]] && source "${gcloud_path}/completion.zsh.inc"
+    }
+
+    gcloud() {
+        _load_gcloud_shell
+        gcloud "$@"
+    }
+
+    gsutil() {
+        _load_gcloud_shell
+        gsutil "$@"
+    }
+
+    bq() {
+        _load_gcloud_shell
+        bq "$@"
+    }
+}

@@ -6,10 +6,11 @@
 # Author: Yago Riveiro
 # ==============================================================================
 
-# ------------------------------------------------------------------------------
-# Core Annexes
-# These are required for Zinit's extended functionality
-# ------------------------------------------------------------------------------
+(( ${ZSH_ZINIT_AVAILABLE:-0} )) || return
+
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
 zinit light-mode for \
     zdharma-continuum/z-a-rust \
     zdharma-continuum/z-a-as-monitor \
@@ -32,14 +33,6 @@ zinit wait lucid for \
 zinit wait lucid as"completion" for \
     dwaynebradley/k3d-oh-my-zsh-plugin \
     MenkeTechnologies/zsh-cargo-completion
-
-# ------------------------------------------------------------------------------
-# Cloud Tool Completions
-# Completions for cloud-related tools
-# ------------------------------------------------------------------------------
-zinit wait lucid for \
-    atinit"autoload -Uz bashcompinit && bashcompinit" \
-    'https://raw.githubusercontent.com/Azure/azure-cli/dev/az.completion'
 
 # ------------------------------------------------------------------------------
 # Navigation and Utility Enhancements

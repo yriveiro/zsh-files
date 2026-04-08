@@ -7,12 +7,6 @@
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
-# Common Color Configuration
-# Source shared color and icon definitions for consistent styling
-# ------------------------------------------------------------------------------
-source "${0:A:h}/00_colors.zsh"
-
-# ------------------------------------------------------------------------------
 # Configuration Navigation Functions
 # These functions help navigate and edit configuration directories
 # ------------------------------------------------------------------------------
@@ -244,9 +238,7 @@ function uv() {
             # Set custom prompt
             export VIRTUAL_ENV_PROMPT="🐍 $project_name-py$py_version"
 
-            # Reinitialize completions to restore all autocompletions
-            autoload -Uz compinit
-            compinit
+            rehash
         else
             echo "❌ Failed to create virtual environment at $venv_path"
         fi

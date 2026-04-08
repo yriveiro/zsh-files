@@ -68,7 +68,7 @@ alias ..="cd .."
 #   If eza is not installed, these aliases are not created and the system
 #   will fall back to the standard 'ls' command behavior.
 # ------------------------------------------------------------------------------
-if command eza &> /dev/null; then
+if (( ${+commands[eza]} )); then
     alias l="eza -l --icons"
     alias la="eza -la --icons"
     alias ll="eza -l -L=2 -T --icons"
@@ -186,7 +186,7 @@ alias reload="source ~/.zshrc"
 #   - Review 'tfp' output carefully before running 'tfa'
 #   - 'tfc' is useful for debugging complex expressions and functions
 # ------------------------------------------------------------------------------
-if command terraform -version &> /dev/null; then
+if (( ${+commands[terraform]} )); then
     alias tf="terraform"
     alias tfv="terraform validate"
     alias tfp="terraform plan"
@@ -228,7 +228,7 @@ fi
 #   - Always verify current context before applying changes to avoid accidents
 #   - Use namespaces to organize and isolate resources effectively
 # ------------------------------------------------------------------------------
-if command kubectl &> /dev/null; then
+if (( ${+commands[kubectl]} )); then
     alias k="kubectl"
     alias ka="kubectl apply"
     alias kc="kubectl create"
@@ -237,7 +237,7 @@ if command kubectl &> /dev/null; then
     alias kr="kubectl delete"
 fi
 
-if command switcher -v &> /dev/null; then
+if (( ${+commands[switcher]} )); then
     alias kctx="switch"
     alias kns="switch namespace"
 fi
@@ -271,7 +271,7 @@ fi
 #   - Tmux allows multiple terminals within a single session
 #   - Sessions can be shared between different terminal windows
 # ------------------------------------------------------------------------------
-if command tmux -V &> /dev/null; then
+if (( ${+commands[tmux]} )); then
     alias mu="tmux"
     alias mua="tmux attach"
     alias muls="tmux ls"

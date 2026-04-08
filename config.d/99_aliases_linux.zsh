@@ -13,9 +13,9 @@
 # Development Directory Shortcuts
 # Quick access to development directories
 # ------------------------------------------------------------------------------
-alias github="cd /data/Development/github.com"
-alias gist="cd /data/Development/gist"
-alias devel="cd /data/Development"
+alias github="cd ${DEV_ROOT}/github.com"
+alias gist="cd ${DEV_ROOT}/gist"
+alias devel="cd ${DEV_ROOT}"
 
 # ------------------------------------------------------------------------------
 # System Maintenance

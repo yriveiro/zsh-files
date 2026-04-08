@@ -1,6 +1,5 @@
 #!/bin/zsh -f
 
-# ANSI color codes for output formatting
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
@@ -10,7 +9,6 @@ MAGENTA='\033[0;35m'
 WHITE='\033[0;37m'
 RESET='\033[0m'
 
-# Status Symbols
 CHECK_MARK="✅"
 CROSS_MARK="❌"
 WARNING="⚠️"
@@ -18,7 +16,6 @@ INFO="ℹ️"
 QUESTION="❓"
 EXCLAMATION="❗"
 
-# Progress and Actions
 ROCKET="🚀"
 WORKING="🛠️"
 GEAR="⚙️"
@@ -30,18 +27,16 @@ LOCK="🔒"
 UNLOCK="🔓"
 KEY="🔑"
 
-# Development and System
 PACKAGE="📦"
 BUG="🐛"
-DEBUG="🔧"
-ZSH_ICON="🐚"  # Using ZSH_ICON instead of SHELL to avoid conflicts
+DEBUG_ICON="🔧"
+ZSH_ICON="🐚"
 CODE="💻"
 DATABASE="🗄️"
 CLOUD="☁️"
 SERVER="🖥️"
 NETWORK="🌐"
 
-# File Operations
 FILE="📄"
 FOLDER="📁"
 ZIP="🗜️"
@@ -49,7 +44,6 @@ TRASH="🗑️"
 CLIPBOARD="📋"
 MEMO="📝"
 
-# Status and Notifications
 SUCCESS="💚"
 ERROR="💔"
 ALERT="🚨"
@@ -58,40 +52,37 @@ MAIL="📧"
 BATTERY="🔋"
 PLUG="🔌"
 
-# Time and Progress
 CLOCK="🕐"
 CALENDAR="📅"
 STOPWATCH="⏱️"
 TIMER="⏲️"
 
-# Predefined color + symbol combinations
 CROSS="${RED}${CROSS_MARK}${RESET}"
 CHECK="${GREEN}${CHECK_MARK}${RESET}"
 WARN="${YELLOW}${WARNING}${RESET}"
 NOTE="${BLUE}${INFO}${RESET}"
 
-# Info and error message functions with consistent styling
-function info() {
-  printf "${CYAN}${BELL} [INFO]${RESET}: ${1}\n" 2>&1
+info() {
+  printf "%b%s%b: %s\n" "${CYAN}" "${BELL} [INFO]" "${RESET}" "$1"
 }
 
-function err() {
-  printf "${RED}${ERROR} [ERR]${RESET}: ${1}\n" 2>&1
+err() {
+  printf "%b%s%b: %s\n" "${RED}" "${ERROR} [ERR]" "${RESET}" "$1"
 }
 
-function warn() {
-  printf "${YELLOW}${WARNING} [WARN]${RESET}: ${1}\n" 2>&1
-}
-
-function debug() {
-  printf "${MAGENTA}${DEBUG} [DEBUG]${RESET}: ${1}\n" 2>&1
+warn() {
+  printf "%b%s%b: %s\n" "${YELLOW}" "${WARNING} [WARN]" "${RESET}" "$1"
 }
 
 debug() {
-  [[ -z "$DEBUG" || "$DEBUG" == 1 ]] && return
-  printf "${MAGENTA}${DEBUG} [DEBUG]${RESET}: ${1}\n" >&2
+  case "${ZSH_DEBUG:-0}" in
+    1|true|TRUE|yes|YES|on|ON) ;;
+    *) return 0 ;;
+  esac
+
+  printf "%b%s%b: %s\n" "${MAGENTA}" "${DEBUG_ICON} [DEBUG]" "${RESET}" "$1" >&2
 }
 
-function success() {
-  printf "${GREEN}${SUCCESS} [SUCCESS]${RESET}: ${1}\n" 2>&1
+success() {
+  printf "%b%s%b: %s\n" "${GREEN}" "${SUCCESS} [SUCCESS]" "${RESET}" "$1"
 }

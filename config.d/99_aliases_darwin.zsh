@@ -62,9 +62,9 @@
 #   - GitHub and Gist directories can be organized by username or project type
 #   - Dump directory is ideal for temporary downloads and file processing
 # ------------------------------------------------------------------------------
-alias github="cd ~/Development/github"
-alias gist="cd ~/Development/gist"
-alias devel="cd ~/Development"
+alias github="cd ${DEV_ROOT}/github"
+alias gist="cd ${DEV_ROOT}/gist"
+alias devel="cd ${DEV_ROOT}"
 alias dump="cd ~/Dump"
 
 # ------------------------------------------------------------------------------

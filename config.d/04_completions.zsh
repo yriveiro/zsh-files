@@ -6,6 +6,4 @@
 # Author: Yago Riveiro
 # ==============================================================================
 
-# Add custom completions directory to fpath
-# This must be done before zinit calls zicompinit
-fpath+=("${HOME}/.config/zsh/completions")
+fpath+=("${ZSH_CONFIG_ROOT:-${HOME}/.config/zsh}/completions")
