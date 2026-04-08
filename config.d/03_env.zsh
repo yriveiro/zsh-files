@@ -30,6 +30,12 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 # Use bat for brew info/cat if available
 export HOMEBREW_BAT=1
 
+# ------------------------------------------------------------------------------
+# Telemetry / Analytics Disable Flags
+# Disable telemetry for various tools
+# ------------------------------------------------------------------------------
+export LIGHTPANDA_DISABLE_TELEMETRY=true
+
 
 # ------------------------------------------------------------------------------
 # Common Tool Initialization
